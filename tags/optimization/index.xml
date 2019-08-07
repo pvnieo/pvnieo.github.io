@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>pvnieo</title>
-    <link>https://pvnieo.github.io/</link>
-      <atom:link href="https://pvnieo.github.io/index.xml" rel="self" type="application/rss+xml" />
-    <description>pvnieo</description>
+    <title>Optimization | pvnieo</title>
+    <link>https://pvnieo.github.io/tags/optimization/</link>
+      <atom:link href="https://pvnieo.github.io/tags/optimization/index.xml" rel="self" type="application/rss+xml" />
+    <description>Optimization</description>
     <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><copyright>© 2019 Souhaib Attaiki, made with lots of ❤️ and steaming hot ☕️.</copyright><lastBuildDate>Sat, 27 Apr 2019 00:00:00 +0000</lastBuildDate>
     <image>
       <url>https://pvnieo.github.io/img/icon.png</url>
-      <title>pvnieo</title>
-      <link>https://pvnieo.github.io/</link>
+      <title>Optimization</title>
+      <link>https://pvnieo.github.io/tags/optimization/</link>
     </image>
     
     <item>
@@ -24,30 +24,6 @@
 &lt;p&gt;Project Euler is a set of challenging computational/algorithmic problems. Every so often,
 new problems are added and old problems are changed to reduce cheating from other sources.
 You can find the problems here: &lt;a href=&#34;https://projecteuler.net/problems&#34; target=&#34;_blank&#34;&gt;https://projecteuler.net/problems&lt;/a&gt;&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>ManGan</title>
-      <link>https://pvnieo.github.io/project/mangan/</link>
-      <pubDate>Sat, 02 Mar 2019 00:00:00 +0000</pubDate>
-      <guid>https://pvnieo.github.io/project/mangan/</guid>
-      <description>&lt;p&gt;Automatic Manga colorization using Generative Adversarial Networks.&lt;/p&gt;
-
-&lt;p&gt;This project aims to color manga using GANs. For the moment, two types of GANs have been tested: pix2pix and cycle-gan. In this repo, we implemented cycle-gan in pytorch.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Hello World!</title>
-      <link>https://pvnieo.github.io/post/test/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://pvnieo.github.io/post/test/</guid>
-      <description>
-
-&lt;h3 id=&#34;ceci-est-un-test&#34;&gt;Ceci est un test&lt;/h3&gt;
-
-&lt;p&gt;Hello &lt;em&gt;world&lt;/em&gt;!&lt;/p&gt;
 </description>
     </item>
     

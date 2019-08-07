@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Deep Learning | pvnieo</title>
-    <link>https://pvnieo.github.io/tags/deep-learning/</link>
-      <atom:link href="https://pvnieo.github.io/tags/deep-learning/index.xml" rel="self" type="application/rss+xml" />
-    <description>Deep Learning</description>
+    <title>GAN | pvnieo</title>
+    <link>https://pvnieo.github.io/tags/gan/</link>
+      <atom:link href="https://pvnieo.github.io/tags/gan/index.xml" rel="self" type="application/rss+xml" />
+    <description>GAN</description>
     <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><copyright>© 2019 Souhaib Attaiki, made with lots of ❤️ and steaming hot ☕️.</copyright><lastBuildDate>Sat, 02 Mar 2019 00:00:00 +0000</lastBuildDate>
     <image>
       <url>https://pvnieo.github.io/img/icon.png</url>
-      <title>Deep Learning</title>
-      <link>https://pvnieo.github.io/tags/deep-learning/</link>
+      <title>GAN</title>
+      <link>https://pvnieo.github.io/tags/gan/</link>
     </image>
     
     <item>
