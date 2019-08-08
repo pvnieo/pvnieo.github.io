@@ -5,7 +5,7 @@
     <link>https://pvnieo.github.io/tags/algorithms/</link>
       <atom:link href="https://pvnieo.github.io/tags/algorithms/index.xml" rel="self" type="application/rss+xml" />
     <description>Algorithms</description>
-    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><copyright>© 2019 Souhaib Attaiki, made with lots of ❤️ and steaming hot ☕️.</copyright><lastBuildDate>Sat, 27 Apr 2019 00:00:00 +0000</lastBuildDate>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><copyright>© 2019 Souhaib Attaiki, made with lots of ❤️ and steaming hot ☕️.</copyright><lastBuildDate>Tue, 27 Feb 2018 00:00:00 +0000</lastBuildDate>
     <image>
       <url>https://pvnieo.github.io/img/icon.png</url>
       <title>Algorithms</title>
@@ -15,7 +15,7 @@
     <item>
       <title>Project Euler solutions</title>
       <link>https://pvnieo.github.io/project/project-euler/</link>
-      <pubDate>Sat, 27 Apr 2019 00:00:00 +0000</pubDate>
+      <pubDate>Tue, 27 Feb 2018 00:00:00 +0000</pubDate>
       <guid>https://pvnieo.github.io/project/project-euler/</guid>
       <description>
 
@@ -23,7 +23,22 @@
 
 &lt;p&gt;Project Euler is a set of challenging computational/algorithmic problems. Every so often,
 new problems are added and old problems are changed to reduce cheating from other sources.
-You can find the problems here: &lt;a href=&#34;https://projecteuler.net/problems&#34; target=&#34;_blank&#34;&gt;https://projecteuler.net/problems&lt;/a&gt;&lt;/p&gt;
+You can find the problems here: &lt;a href=&#34;https://projecteuler.net/problems&#34; target=&#34;_blank&#34;&gt;https://projecteuler.net/problems&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Every solved problem has a program written in Python and C++.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>My Algorithm Zoo</title>
+      <link>https://pvnieo.github.io/project/algozoo/</link>
+      <pubDate>Thu, 02 Nov 2017 00:00:00 +0000</pubDate>
+      <guid>https://pvnieo.github.io/project/algozoo/</guid>
+      <description>&lt;p&gt;&lt;strong&gt;Implemented algorithms&lt;/strong&gt; so far:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;RPCA: A Python implementation of the Principal Component Pursuit algorithm for robust PCA, based on this &lt;a href=&#34;https://statweb.stanford.edu/~candes/papers/RobustPCA.pdf&#34; target=&#34;_blank&#34;&gt;Robust Principal Component Analysis paper&lt;/a&gt; and this     &lt;a href=&#34;https://arxiv.org/pdf/1009.5055.pdf&#34; target=&#34;_blank&#34;&gt;Augmented Lagrange Multiplier Method paper&lt;/a&gt;.&lt;/li&gt;
+&lt;/ul&gt;
 </description>
     </item>
     

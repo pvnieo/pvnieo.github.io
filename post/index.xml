@@ -5,7 +5,7 @@
     <link>https://pvnieo.github.io/post/</link>
       <atom:link href="https://pvnieo.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     <description>Blog</description>
-    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><copyright>© 2019 Souhaib Attaiki, made with lots of ❤️ and steaming hot ☕️.</copyright>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><copyright>© 2019 Souhaib Attaiki, made with lots of ❤️ and steaming hot ☕️.</copyright><lastBuildDate>Fri, 12 Jul 2019 00:00:00 +0000</lastBuildDate>
     <image>
       <url>https://pvnieo.github.io/img/icon.png</url>
       <title>Blog</title>
@@ -14,14 +14,14 @@
     
     <item>
       <title>Hello World!</title>
-      <link>https://pvnieo.github.io/post/test/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://pvnieo.github.io/post/test/</guid>
-      <description>
+      <link>https://pvnieo.github.io/post/hello-world/</link>
+      <pubDate>Fri, 12 Jul 2019 00:00:00 +0000</pubDate>
+      <guid>https://pvnieo.github.io/post/hello-world/</guid>
+      <description>&lt;p&gt;For some time now, I&#39;ve been wanting to start a blog. I hope to find time and energy to keep posting.&lt;/p&gt;
 
-&lt;h3 id=&#34;ceci-est-un-test&#34;&gt;Ceci est un test&lt;/h3&gt;
+&lt;p&gt;This blog has one main objective, which is to consolidate my knowledge through writing. One of the tests to see if I understood something is whether I can explain it to someone else.&lt;/p&gt;
 
-&lt;p&gt;Hello &lt;em&gt;world&lt;/em&gt;!&lt;/p&gt;
+&lt;p&gt;Feedback is appreciated.&lt;/p&gt;
 </description>
     </item>
     
