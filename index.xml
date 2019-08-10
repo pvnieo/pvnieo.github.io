@@ -5,7 +5,7 @@
     <link>https://pvnieo.github.io/</link>
       <atom:link href="https://pvnieo.github.io/index.xml" rel="self" type="application/rss+xml" />
     <description>pvnieo</description>
-    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><copyright>© 2019 Souhaib Attaiki, made with lots of ❤️ and steaming hot ☕️.</copyright><lastBuildDate>Fri, 12 Jul 2019 00:00:00 +0000</lastBuildDate>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><copyright>© 2019 Souhaib Attaiki, made with lots of ❤️ and steaming hot ☕️.</copyright><lastBuildDate>Sat, 27 Jul 2019 00:00:00 +0000</lastBuildDate>
     <image>
       <url>https://pvnieo.github.io/img/icon.png</url>
       <title>pvnieo</title>
@@ -15,11 +15,11 @@
     <item>
       <title>Hello World!</title>
       <link>https://pvnieo.github.io/post/hello-world/</link>
-      <pubDate>Fri, 12 Jul 2019 00:00:00 +0000</pubDate>
+      <pubDate>Sat, 27 Jul 2019 00:00:00 +0000</pubDate>
       <guid>https://pvnieo.github.io/post/hello-world/</guid>
       <description>&lt;p&gt;For some time now, I&#39;ve been wanting to start a blog. I hope to find time and energy to keep posting.&lt;/p&gt;
 
-&lt;p&gt;This blog has one main objective, which is to consolidate my knowledge through writing. One of the tests to see if I understood something is whether I can explain it to someone else.&lt;/p&gt;
+&lt;p&gt;This blog has two main objectives. The first is to consolidate my knowledge through writing; I find that one of the tests to see if I understood something is to try to explain it to someone else. The second is to share what I have learned with the community, in order to help as many people as possible.&lt;/p&gt;
 
 &lt;p&gt;Feedback is appreciated.&lt;/p&gt;
 </description>
