@@ -65,23 +65,6 @@
     </item>
     
     <item>
-      <title>Project Euler solutions</title>
-      <link>https://pvnieo.github.io/project/project-euler/</link>
-      <pubDate>Tue, 27 Feb 2018 00:00:00 +0000</pubDate>
-      <guid>https://pvnieo.github.io/project/project-euler/</guid>
-      <description>
-
-&lt;h2 id=&#34;what-is-project-euler&#34;&gt;What is Project Euler?&lt;/h2&gt;
-
-&lt;p&gt;Project Euler is a set of challenging computational/algorithmic problems. Every so often,
-new problems are added and old problems are changed to reduce cheating from other sources.
-You can find the problems here: &lt;a href=&#34;https://projecteuler.net/problems&#34; target=&#34;_blank&#34;&gt;https://projecteuler.net/problems&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Every solved problem has a program written in Python and C++.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
       <title>Searchy</title>
       <link>https://pvnieo.github.io/project/searchy/</link>
       <pubDate>Sat, 02 Dec 2017 00:00:00 +0000</pubDate>
@@ -104,6 +87,23 @@ You can find the problems here: &lt;a href=&#34;https://projecteuler.net/problem
 &lt;ul&gt;
 &lt;li&gt;RPCA: A Python implementation of the Principal Component Pursuit algorithm for robust PCA, based on this &lt;a href=&#34;https://statweb.stanford.edu/~candes/papers/RobustPCA.pdf&#34; target=&#34;_blank&#34;&gt;Robust Principal Component Analysis paper&lt;/a&gt; and this     &lt;a href=&#34;https://arxiv.org/pdf/1009.5055.pdf&#34; target=&#34;_blank&#34;&gt;Augmented Lagrange Multiplier Method paper&lt;/a&gt;.&lt;/li&gt;
 &lt;/ul&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Project Euler solutions</title>
+      <link>https://pvnieo.github.io/project/project-euler/</link>
+      <pubDate>Wed, 01 Mar 2017 00:00:00 +0000</pubDate>
+      <guid>https://pvnieo.github.io/project/project-euler/</guid>
+      <description>
+
+&lt;h2 id=&#34;what-is-project-euler&#34;&gt;What is Project Euler?&lt;/h2&gt;
+
+&lt;p&gt;Project Euler is a set of challenging computational/algorithmic problems. Every so often,
+new problems are added and old problems are changed to reduce cheating from other sources.
+You can find the problems here: &lt;a href=&#34;https://projecteuler.net/problems&#34; target=&#34;_blank&#34;&gt;https://projecteuler.net/problems&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Every solved problem has a program written in Python and C++.&lt;/p&gt;
 </description>
     </item>
     

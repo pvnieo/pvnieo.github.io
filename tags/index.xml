@@ -69,30 +69,6 @@
     </item>
     
     <item>
-      <title>Algorithms</title>
-      <link>https://pvnieo.github.io/tags/algorithms/</link>
-      <pubDate>Tue, 27 Feb 2018 00:00:00 +0000</pubDate>
-      <guid>https://pvnieo.github.io/tags/algorithms/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>C&#43;&#43;</title>
-      <link>https://pvnieo.github.io/tags/c&#43;&#43;/</link>
-      <pubDate>Tue, 27 Feb 2018 00:00:00 +0000</pubDate>
-      <guid>https://pvnieo.github.io/tags/c&#43;&#43;/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Optimization</title>
-      <link>https://pvnieo.github.io/tags/optimization/</link>
-      <pubDate>Tue, 27 Feb 2018 00:00:00 +0000</pubDate>
-      <guid>https://pvnieo.github.io/tags/optimization/</guid>
-      <description></description>
-    </item>
-    
-    <item>
       <title>NLP</title>
       <link>https://pvnieo.github.io/tags/nlp/</link>
       <pubDate>Sat, 02 Dec 2017 00:00:00 +0000</pubDate>
@@ -109,10 +85,34 @@
     </item>
     
     <item>
+      <title>Algorithms</title>
+      <link>https://pvnieo.github.io/tags/algorithms/</link>
+      <pubDate>Thu, 02 Nov 2017 00:00:00 +0000</pubDate>
+      <guid>https://pvnieo.github.io/tags/algorithms/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>RPCA</title>
       <link>https://pvnieo.github.io/tags/rpca/</link>
       <pubDate>Thu, 02 Nov 2017 00:00:00 +0000</pubDate>
       <guid>https://pvnieo.github.io/tags/rpca/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>C&#43;&#43;</title>
+      <link>https://pvnieo.github.io/tags/c&#43;&#43;/</link>
+      <pubDate>Wed, 01 Mar 2017 00:00:00 +0000</pubDate>
+      <guid>https://pvnieo.github.io/tags/c&#43;&#43;/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Optimization</title>
+      <link>https://pvnieo.github.io/tags/optimization/</link>
+      <pubDate>Wed, 01 Mar 2017 00:00:00 +0000</pubDate>
+      <guid>https://pvnieo.github.io/tags/optimization/</guid>
       <description></description>
     </item>
     
