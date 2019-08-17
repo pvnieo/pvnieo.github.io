@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Blog | pvnieo</title>
-    <link>https://pvnieo.github.io/post/</link>
-      <atom:link href="https://pvnieo.github.io/post/index.xml" rel="self" type="application/rss+xml" />
-    <description>Blog</description>
+    <title>Learning rate | pvnieo</title>
+    <link>https://pvnieo.github.io/tags/learning-rate/</link>
+      <atom:link href="https://pvnieo.github.io/tags/learning-rate/index.xml" rel="self" type="application/rss+xml" />
+    <description>Learning rate</description>
     <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><copyright>© 2019 Souhaib Attaiki, made with lots of ❤️ and steaming hot ☕️.</copyright><lastBuildDate>Sat, 10 Aug 2019 00:00:00 +0000</lastBuildDate>
     <image>
       <url>https://pvnieo.github.io/img/icon.png</url>
-      <title>Blog</title>
-      <link>https://pvnieo.github.io/post/</link>
+      <title>Learning rate</title>
+      <link>https://pvnieo.github.io/tags/learning-rate/</link>
     </image>
     
     <item>
@@ -248,19 +248,6 @@ stds   0.0407632  0.0746226  0.00278381  0.00141619  0.00759342  0.00507685
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Et Voila! as we can see, the learning rate suggested by lr_finder gives the best result.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Hello World!</title>
-      <link>https://pvnieo.github.io/post/hello-world/</link>
-      <pubDate>Sat, 27 Jul 2019 00:00:00 +0000</pubDate>
-      <guid>https://pvnieo.github.io/post/hello-world/</guid>
-      <description>&lt;p&gt;For some time now, I&#39;ve been wanting to start a blog. I hope to find time and energy to keep posting.&lt;/p&gt;
-
-&lt;p&gt;This blog has two main objectives. The first is to consolidate my knowledge through writing; I find that one of the tests to see if I understood something is to try to explain it to someone else. The second is to share what I have learned with the community, in order to help as many people as possible.&lt;/p&gt;
-
-&lt;p&gt;Feedback is appreciated.&lt;/p&gt;
 </description>
     </item>
     

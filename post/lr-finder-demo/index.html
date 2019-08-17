@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="generator" content="Source Themes Academic 4.4.0">
+
+  
+
+  
+  
+  
+  
+  
+    
+    
+    
+  
+  
+
+  <meta name="author" content="Souhaib Attaiki">
+
+  
+  
+  
+    
+  
+  <meta name="description" content="Learning rate finder During the training of neural networks, one of the most important hyperparameters, and which largely influences the convergence of the latter, is the learning rate. Choosing a good learning rate is not a simple task, and it is often done using a grid search. However, this can take a long time, especially if the network is very large.
+In his paper &quot;Cyclical Learning Rates for Training Neural Networks&quot;, Leslie Smith presented a method for finding a good learning rate for the majority of gradient based optimizers.">
+
+  
+  <link rel="alternate" hreflang="en-us" href="https://pvnieo.github.io/post/lr-finder-demo/">
+
+  
+
+
+  
+
+  
+  
+  
+  <meta name="theme-color" content="rgb(0, 136, 204)">
+  
+
+  
+  
+  
+  
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.6/css/academicons.min.css" integrity="sha256-uFVgMKfistnJAfoCUQigIl+JfUaP47GrRKjf6CTPVmw=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.0/css/all.css" integrity="sha384-aOkxzJ5uQz7WBObEZcHvV5JvRW3TUc2rNPA7pe3AwnsUohiw1Vj2Rgx2KSOkF5+h" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" integrity="sha256-ygkqlh3CYSUri3LhQxzdcm0n1EQvH2Y+U5S2idbLtxs=" crossorigin="anonymous">
+
+    
+    
+    
+      
+    
+    
+      
+      
+        
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css" crossorigin="anonymous" title="hl-light" disabled>
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/dracula.min.css" crossorigin="anonymous" title="hl-dark">
+        
+      
+    
+
+    
+
+    
+
+  
+
+  
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Cutive+Mono|Lora:400,700|Roboto:400,700&display=swap">
+  
+
+  
+  
+  
+  <link rel="stylesheet" href="/css/academic.min.d035b2830ed3550c5f80c484f872e14d.css">
+
+  
+
+  
+  
+  
+
+  
+
+  <link rel="manifest" href="/index.webmanifest">
+  <link rel="icon" type="image/png" href="/img/icon-32.png">
+  <link rel="apple-touch-icon" type="image/png" href="/img/icon-192.png">
+
+  <link rel="canonical" href="https://pvnieo.github.io/post/lr-finder-demo/">
+
+  
+  
+  
+  
+    
+  
+  
+  <meta property="twitter:card" content="summary_large_image">
+  
+  <meta property="og:site_name" content="pvnieo">
+  <meta property="og:url" content="https://pvnieo.github.io/post/lr-finder-demo/">
+  <meta property="og:title" content="How to use the Learning Rate Finder in Pytorch | pvnieo">
+  <meta property="og:description" content="Learning rate finder During the training of neural networks, one of the most important hyperparameters, and which largely influences the convergence of the latter, is the learning rate. Choosing a good learning rate is not a simple task, and it is often done using a grid search. However, this can take a long time, especially if the network is very large.
+In his paper &quot;Cyclical Learning Rates for Training Neural Networks&quot;, Leslie Smith presented a method for finding a good learning rate for the majority of gradient based optimizers."><meta property="og:image" content="https://pvnieo.github.io/post/lr-finder-demo/featured.jpeg">
+  <meta property="twitter:image" content="https://pvnieo.github.io/post/lr-finder-demo/featured.jpeg"><meta property="og:locale" content="en-us">
+  
+    
+      <meta property="article:published_time" content="2019-08-10T00:00:00&#43;00:00">
+    
+    <meta property="article:modified_time" content="2019-08-10T00:00:00&#43;00:00">
+  
+
+  
+
+
+  
+
+
+
+
+
+  <title>How to use the Learning Rate Finder in Pytorch | pvnieo</title>
+
+</head>
+
+<body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" class="dark">
+
+  <aside class="search-results" id="search">
+  <div class="container">
+    <section class="search-header">
+
+      <div class="row no-gutters justify-content-between mb-3">
+        <div class="col-6">
+          <h1>Search</h1>
+        </div>
+        <div class="col-6 col-search-close">
+          <a class="js-search" href="#"><i class="fas fa-times-circle text-muted" aria-hidden="true"></i></a>
+        </div>
+      </div>
+
+      <div id="search-box">
+        
+        <input name="q" id="search-query" placeholder="Search..." autocapitalize="off"
+        autocomplete="off" autocorrect="off" spellcheck="false" type="search">
+        
+      </div>
+
+    </section>
+    <section class="section-search-results">
+
+      <div id="search-hits">
+        
+      </div>
+
+    </section>
+  </div>
+</aside>
+
+
+  
+<nav class="navbar navbar-light fixed-top navbar-expand-lg py-0 compensate-for-scrollbar" id="navbar-main">
+  <div class="container">
+
+    
+      <a class="navbar-brand" href="/"><img src="/img/icon.png" alt="pvnieo"></a>
+      
+      <button type="button" class="navbar-toggler" data-toggle="collapse"
+              data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+        <span><i class="fas fa-bars"></i></span>
+      </button>
+      
+
+    
+    <div class="collapse navbar-collapse" id="navbar">
+
+      
+      
+      <ul class="navbar-nav mr-auto">
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+          
+          
+          
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/#about"><span>Home</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+          
+          
+          
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/#projects"><span>Projects</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+          
+          
+          
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/#posts"><span>Posts</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+          
+          
+          
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/#contact"><span>Contact</span></a>
+        </li>
+
+        
+        
+
+      
+      </ul>
+      <ul class="navbar-nav ml-auto">
+      
+
+        
+
+        
+        <li class="nav-item">
+          <a class="nav-link js-search" href="#"><i class="fas fa-search" aria-hidden="true"></i></a>
+        </li>
+        
+
+        
+
+        
+        <li class="nav-item">
+          <a class="nav-link js-dark-toggle" href="#"><i class="fas fa-moon" aria-hidden="true"></i></a>
+        </li>
+        
+
+      </ul>
+
+    </div>
+  </div>
+</nav>
+
+
+  <article class="article" itemscope itemtype="http://schema.org/Article">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+<div class="article-container pt-3">
+  <h1 itemprop="name">How to use the Learning Rate Finder in Pytorch</h1>
+
+  
+
+  
+
+
+
+<meta content="2019-08-10 00:00:00 &#43;0000 UTC" itemprop="datePublished">
+<meta content="2019-08-10 00:00:00 &#43;0000 UTC" itemprop="dateModified">
+
+<div class="article-metadata">
+
+  
+  
+
+  
+  <span class="article-date">
+    
+    
+      
+    
+    <time>Aug 10, 2019</time>
+  </span>
+  
+
+  
+
+  
+  <span class="middot-divider"></span>
+  <span class="article-reading-time">
+    5 min read
+  </span>
+  
+
+  
+  
+  
+
+  
+  
+
+  
+    
+<div class="share-box" aria-hidden="true">
+  <ul class="share">
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://twitter.com/intent/tweet?url=https://pvnieo.github.io/post/lr-finder-demo/&amp;text=How%20to%20use%20the%20Learning%20Rate%20Finder%20in%20Pytorch" target="_blank" rel="noopener" class="share-btn-twitter">
+          <i class="fab fa-twitter"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.facebook.com/sharer.php?u=https://pvnieo.github.io/post/lr-finder-demo/&amp;t=How%20to%20use%20the%20Learning%20Rate%20Finder%20in%20Pytorch" target="_blank" rel="noopener" class="share-btn-facebook">
+          <i class="fab fa-facebook-f"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="mailto:?subject=How%20to%20use%20the%20Learning%20Rate%20Finder%20in%20Pytorch&amp;body=https://pvnieo.github.io/post/lr-finder-demo/" target="_blank" rel="noopener" class="share-btn-email">
+          <i class="fas fa-envelope"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.linkedin.com/shareArticle?url=https://pvnieo.github.io/post/lr-finder-demo/&amp;title=How%20to%20use%20the%20Learning%20Rate%20Finder%20in%20Pytorch" target="_blank" rel="noopener" class="share-btn-linkedin">
+          <i class="fab fa-linkedin-in"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://web.whatsapp.com/send?text=How%20to%20use%20the%20Learning%20Rate%20Finder%20in%20Pytorch%20https://pvnieo.github.io/post/lr-finder-demo/" target="_blank" rel="noopener" class="share-btn-whatsapp">
+          <i class="fab fa-whatsapp"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://service.weibo.com/share/share.php?url=https://pvnieo.github.io/post/lr-finder-demo/&amp;title=How%20to%20use%20the%20Learning%20Rate%20Finder%20in%20Pytorch" target="_blank" rel="noopener" class="share-btn-weibo">
+          <i class="fab fa-weibo"></i>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+  
+
+</div>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+
+<div class="article-header container-fluid featured-image-wrapper mt-4 mb-4" style="max-width: 1280px; max-height: 480px;">
+  <div style="position: relative">
+    <img src="/post/lr-finder-demo/featured.jpeg" alt="" class="featured-image">
+    
+  </div>
+</div>
+
+
+
+  <div class="article-container">
+
+    <div class="article-style" itemprop="articleBody">
+      <h1 id="learning-rate-finder">Learning rate finder</h1>
+
+<p>During the training of neural networks, one of the most important hyperparameters, and which largely influences the convergence of the latter, is the learning rate. Choosing a good learning rate is not a simple task, and it is often done using a grid search. However, this can take a long time, especially if the network is very large.</p>
+
+<p>In his paper &quot;<a href="https://arxiv.org/pdf/1506.01186.pdf">Cyclical Learning Rates for Training Neural Networks</a>&quot;, Leslie Smith presented a method for finding a good learning rate for the majority of gradient based optimizers.</p>
+
+<p>This method consists in starting the training of the network with a very small learning rate (10-8 for example), and increasing it exponentially with each mini-batch, until reaching a large value (1 or 10), or until the loss diverges (practically, we stop the loop if the loss reached is 4 or 5 times greater than the minimum loss we obtained).</p>
+
+<p>At the end of the loop, a learning rate is chosen in the region where the loss was minimal. In practice, we take a value an order of magnitude smaller than the one that gave the minimum loss, a value that is always aggressive (to train quickly) but that remains safe in case of an explosion.</p>
+
+<p>In the following, we will demonstrate the usefulness of this method by using an implementation of this method that we have done. You can find this implementation <a href="https://github.com/pvnieo/My-Algorithm-Zoo/blob/master/Learning%20rate%20finder/lr_finder.py">here</a>.</p>
+
+<h2 id="demo-time">Demo time</h2>
+
+<p>First of all, let's start by importing the necessary packages.</p>
+
+<pre><code># stdlib
+import time
+import warnings
+import copy
+from collections import defaultdict
+# 3p
+import numpy as np
+from tabulate import tabulate
+import matplotlib.pyplot as plt
+from tqdm import tqdm
+import torch
+import torchvision
+import torch.nn as nn
+import torch.nn.functional as F
+import torch.optim as optim
+
+# project
+from lr_finder import LRFinder
+
+warnings.filterwarnings('ignore')
+%reload_ext autoreload
+%autoreload 2
+%matplotlib inline
+</code></pre>
+
+<p>For this demonstration, we will use the MNIST dataset, and we will implement a very simple neural network using pytorch.</p>
+
+<p>First of all, we define the data loaders and the transformations we will use later.</p>
+
+<pre><code>batch_size_train = 64
+batch_size_test = 1000
+## creating dataloaders
+train_loader = torch.utils.data.DataLoader(
+  torchvision.datasets.MNIST('/files/', train=True, download=True,
+                             transform=torchvision.transforms.Compose([
+                             torchvision.transforms.ToTensor(),
+                             torchvision.transforms.Normalize(
+                               (0.1307,), (0.3081,))
+                             ])),
+  batch_size=batch_size_train, shuffle=True)
+
+val_loader = torch.utils.data.DataLoader(
+  torchvision.datasets.MNIST('/files/', train=False, download=True,
+                             transform=torchvision.transforms.Compose([
+                               torchvision.transforms.ToTensor(),
+                               torchvision.transforms.Normalize(
+                                 (0.1307,), (0.3081,))
+                             ])),
+  batch_size=batch_size_test, shuffle=True)
+dataloaders = {&quot;train&quot;: train_loader, &quot;val&quot;: val_loader}
+</code></pre>
+
+<pre><code>examples = enumerate(val_loader)
+batch_idx, (example_data, example_targets) = next(examples)
+fig = plt.figure()
+for i in range(6):
+  plt.subplot(2,3,i+1)
+  plt.tight_layout()
+  plt.imshow(example_data[i][0], cmap='gray', interpolation='none')
+  plt.title(&quot;Ground Truth: {}&quot;.format(example_targets[i]))
+  plt.xticks([])
+  plt.yticks([])
+fig
+</code></pre>
+
+<p><figure><img src="./demo_5_0.png" alt="png"></figure></p>
+
+<p><figure><img src="./demo_5_1.png" alt="png"></figure></p>
+
+<p>Now let's build the network. We will use a simple network, with three convolution layers, and two fully connected layers.</p>
+
+<pre><code>## build the network
+class Net(nn.Module):
+    def __init__(self):
+        super(Net, self).__init__()
+        self.conv1 = nn.Conv2d(1, 10, kernel_size=5)
+        self.conv2 = nn.Conv2d(10, 20, kernel_size=5)
+        self.conv2_drop = nn.Dropout2d()
+        self.fc1 = nn.Linear(320, 50)
+        self.fc2 = nn.Linear(50, 10)
+
+    def forward(self, x):
+        x = F.relu(F.max_pool2d(self.conv1(x), 2))
+        x = F.relu(F.max_pool2d(self.conv2_drop(self.conv2(x)), 2))
+        x = x.view(-1, 320)
+        x = F.relu(self.fc1(x))
+        x = F.dropout(x, training=self.training)
+        x = self.fc2(x)
+        return F.log_softmax(x)
+</code></pre>
+
+<p>We will use the CrossEntropyLoss as a loss because we are facing a classification task, and we will use the famous SGD optimizer to optimize the network.</p>
+
+<pre><code>model = Net()
+optimizer = optim.SGD(model.parameters(), lr=0.001)
+device = torch.device(&quot;cuda:0&quot; if torch.cuda.is_available() else &quot;cpu&quot;)
+criterion = nn.CrossEntropyLoss().to(device)
+</code></pre>
+
+<p>Let's define a helper method that will train the model</p>
+
+<pre><code>def train_model(model, criterion, optimizer, num_epochs=25):
+    since = time.time()
+
+    best_model_wts = copy.deepcopy(model.state_dict())
+    best_acc = 0.0
+
+    for epoch in range(num_epochs):
+
+        # Each epoch has a training and validation phase
+        for phase in ['train', 'val']:
+            if phase == 'train':
+                model.train()  # Set model to training mode
+            else:
+                model.eval()   # Set model to evaluate mode
+
+            running_loss = 0.0
+            running_corrects = 0
+
+            # Iterate over data.
+            for inputs, labels in dataloaders[phase]:
+                inputs = inputs.to(device)
+                labels = labels.to(device)
+
+                # zero the parameter gradients
+                optimizer.zero_grad()
+
+                # forward
+                # track history if only in train
+                with torch.set_grad_enabled(phase == 'train'):
+                    outputs = model(inputs)
+                    _, preds = torch.max(outputs, 1)
+                    loss = criterion(outputs, labels)
+
+                    # backward + optimize only if in training phase
+                    if phase == 'train':
+                        loss.backward()
+                        optimizer.step()
+
+                # statistics
+                running_loss += loss.item() * inputs.size(0)
+                running_corrects += torch.sum(preds == labels.data)
+
+            epoch_loss = running_loss / len(dataloaders[phase].dataset)
+            epoch_acc = running_corrects.double() / len(dataloaders[phase].dataset)
+
+
+            # deep copy the model
+            if phase == 'val' and epoch_acc &gt; best_acc:
+                best_acc = epoch_acc
+                best_model_wts = copy.deepcopy(model.state_dict())
+
+
+    time_elapsed = time.time() - since
+
+    # load best model weights
+    model.load_state_dict(best_model_wts)
+    return best_acc.item()
+</code></pre>
+
+<p>In order to evaluate this method, we will train the same network several times, using the same hyperparameters, but only change the learning rate. First we will launch the learning rate finder method to find the optimal learning rate.</p>
+
+<pre><code>model = Net()
+optimizer = optim.SGD(model.parameters(), lr=0.1)
+lr_finder = LRFinder(model, optimizer, criterion)
+lr_finder.find(train_loader)
+plt.figure(figsize=(6,6))
+lr_finder.plot()
+</code></pre>
+
+<pre><code> 89%|████████▉ | 89/100 [00:00&lt;00:00, 91.63it/s]
+
+
+LR Finder is complete. See the graph using `.plot()` method.
+Min numerical gradient: 0.39810717055349676
+Min loss: 0.7585775750291828
+</code></pre>
+
+<p><figure><img src="./demo_13_2.png" alt="png"></figure></p>
+
+<p>After observing the graph, and following the instructions mentioned above, we will choose the value 0.1 for the learning rate.
+As a result, we will compare this value with other learning rate values which are 1e-4, 1e-3, 1e-2, 1 and 10. For each value, we will train the model 5 times, and we will record the average value of the accuracy obtained. The results will be summarized in a table below.</p>
+
+<pre><code>lrs = [1e-4, 1e-3, 1e-2, 0.1, 1, 10]
+repeat = 5
+accs = defaultdict(list)
+for lr in tqdm(lrs):
+    for _ in range(repeat):
+        model = Net().to(device)
+        optimizer = optim.SGD(model.parameters(), lr=lr)
+        acc = train_model(model, criterion, optimizer, num_epochs=3)
+        accs[lr].append(acc)
+</code></pre>
+
+<pre><code>  0%|          | 0/6 [00:00&lt;?, ?it/s]
+ 17%|█▋        | 1/6 [02:43&lt;13:38, 163.62s/it]
+ 33%|███▎      | 2/6 [05:26&lt;10:53, 163.29s/it]
+ 50%|█████     | 3/6 [08:08&lt;08:08, 162.99s/it]
+ 67%|██████▋   | 4/6 [10:50&lt;05:25, 162.65s/it]
+ 83%|████████▎ | 5/6 [13:34&lt;02:43, 163.02s/it]
+100%|██████████| 6/6 [16:18&lt;00:00, 163.38s/it]
+</code></pre>
+
+<pre><code>means = [&quot;means&quot;] + [np.mean(accs[lr]) for lr in lrs]
+stds = [&quot;stds&quot;] + [np.std(accs[lr]) for lr in lrs]
+print(tabulate([means, stds], headers=[&quot;lrs&quot;] + lrs))
+</code></pre>
+
+<pre><code>lrs       0.0001      0.001        0.01         0.1           1          10
+-----  ---------  ---------  ----------  ----------  ----------  ----------
+means  0.17946    0.74826    0.95522     0.98172     0.1073      0.10414
+stds   0.0407632  0.0746226  0.00278381  0.00141619  0.00759342  0.00507685
+</code></pre>
+
+<p>Et Voila! as we can see, the learning rate suggested by lr_finder gives the best result.</p>
+
+    </div>
+
+    
+
+
+    
+
+<div class="article-tags">
+  
+  <a class="badge badge-light" href="/tags/optimization/">Optimization</a>
+  
+  <a class="badge badge-light" href="/tags/learning-rate/">Learning rate</a>
+  
+  <a class="badge badge-light" href="/tags/pytorch/">Pytorch</a>
+  
+</div>
+
+
+
+    
+      
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+  
+  
+    
+  
+  
+  <div class="media author-card" itemscope itemtype="http://schema.org/Person">
+    
+      
+      <img class="portrait mr-3" src="/authors/admin/avatar_hu89c008f47ff8946cace8a4fb81c3947b_29222_250x250_fill_lanczos_center_2.png" itemprop="image" alt="Avatar">
+    
+
+    <div class="media-body">
+      <h5 class="card-title" itemprop="name"><a href="https://pvnieo.github.io/">Souhaib Attaiki</a></h5>
+      <h6 class="card-subtitle">Applied Mathematics / Computer Science student</h6>
+      <p class="card-text" itemprop="description">Passionate about computer vision and machine learning.</p>
+      <ul class="network-icon" aria-hidden="true">
+        
+          
+          
+          
+            
+          
+          
+          
+          
+          
+            
+          
+          <li>
+            <a itemprop="sameAs" href="https://www.linkedin.com/in/souhaib-attaiki-595121102/" target="_blank" rel="noopener">
+              <i class="fab fa-linkedin"></i>
+            </a>
+          </li>
+        
+          
+          
+          
+            
+          
+          
+          
+          
+          
+            
+          
+          <li>
+            <a itemprop="sameAs" href="https://github.com/pvnieo" target="_blank" rel="noopener">
+              <i class="fab fa-github"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+
+
+      
+      
+      <div class="article-widget">
+        <div class="hr-light"></div>
+        <h3>Related</h3>
+        <ul>
+          
+          <li><a href="/project/mangan/">ManGan</a></li>
+          
+          <li><a href="/project/project-euler/">Project Euler solutions</a></li>
+          
+        </ul>
+      </div>
+      
+    
+
+    
+
+    
+
+
+  </div>
+</article>
+
+      
+
+    
+    
+    
+    <script src="/js/mathjax-config.js"></script>
+    
+
+    
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.4/imagesloaded.pkgd.min.js" integrity="sha256-lqvxZrPLtfffUl2G/e7szqSvPBILGbwmsGE1MKlOi0Q=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.6/isotope.pkgd.min.js" integrity="sha256-CBrpuqrMhXwcLLUd5tvQ4euBHCdh7wGlDfNz8vbu/iI=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" integrity="sha256-X5PoE3KU5l+JcX+w09p/wHl9AzK333C4hJ2I9S5mD4M=" crossorigin="anonymous"></script>
+
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/8.0.0/mermaid.min.js" integrity="sha256-0w92bcB21IY5+rGI84MGj52jNfHNbXVeQLrZ0CGdjNY=" crossorigin="anonymous" title="mermaid"></script>
+      
+
+      
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js" integrity="sha256-aYTdUrn6Ow1DDgh5JTc3aDGnnju48y/1c8s1dgkYPQ8=" crossorigin="anonymous"></script>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/languages/python.min.js"></script>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/languages/c&#43;&#43;.min.js"></script>
+        
+      
+
+      
+      
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_CHTML-full" integrity="sha256-GhM+5JHb6QUzOQPXSJLEWP7R73CbkisjzK5Eyij4U9w=" crossorigin="anonymous" async></script>
+      
+    
+
+    
+    
+
+    
+    
+    <script>hljs.initHighlightingOnLoad();</script>
+    
+
+    
+    
+    <script>
+      const search_index_filename = "/index.json";
+      const i18n = {
+        'placeholder': "Search...",
+        'results': "results found",
+        'no_results': "No results found"
+      };
+      const content_type = {
+        'post': "Posts",
+        'project': "Projects",
+        'publication' : "Publications",
+        'talk' : "Talks"
+        };
+    </script>
+    
+
+    
+    
+
+    
+    
+    <script id="search-hit-fuse-template" type="text/x-template">
+      <div class="search-hit" id="summary-{{key}}">
+      <div class="search-hit-content">
+        <div class="search-hit-name">
+          <a href="{{relpermalink}}">{{title}}</a>
+          <div class="article-metadata search-hit-type">{{type}}</div>
+          <p class="search-hit-description">{{snippet}}</p>
+        </div>
+      </div>
+      </div>
+    </script>
+    
+
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.1/fuse.min.js" integrity="sha256-VzgmKYmhsGNNN4Ph1kMW+BjoYJM2jV5i4IlFoeZA9XI=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+    
+
+    
+    
+
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+      
+    
+    
+    
+    
+    <script src="/js/academic.min.16bbb3750feb7244c9bc409a5a4fe678.js"></script>
+
+    
+
+
+
+
+
+
+  
+  <div class="container">
+    <footer class="site-footer">
+  
+
+  <p class="powered-by">
+    &copy; 2019 Souhaib Attaiki, made with lots of ❤️ and steaming hot ☕️. 
+    
+    <span class="float-right" aria-hidden="true">
+      <a href="#" id="back_to_top">
+        <span class="button_icon">
+          <i class="fas fa-chevron-up fa-2x"></i>
+        </span>
+      </a>
+    </span>
+    
+  </p>
+</footer>
+
+  </div>
+  
+
+  
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Cite</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <pre><code class="tex hljs"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-outline-primary my-1 js-copy-cite" href="#" target="_blank">
+          <i class="fas fa-copy"></i> Copy
+        </a>
+        <a class="btn btn-outline-primary my-1 js-download-cite" href="#" target="_blank">
+          <i class="fas fa-download"></i> Download
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
