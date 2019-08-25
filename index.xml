@@ -5,12 +5,591 @@
     <link>https://pvnieo.github.io/</link>
       <atom:link href="https://pvnieo.github.io/index.xml" rel="self" type="application/rss+xml" />
     <description>pvnieo</description>
-    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><copyright>© 2019 Souhaib Attaiki, made with lots of ❤️ and steaming hot ☕️.</copyright><lastBuildDate>Sat, 10 Aug 2019 00:00:00 +0000</lastBuildDate>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><copyright>© 2019 Souhaib Attaiki, made with lots of ❤️ and steaming hot ☕️.</copyright><lastBuildDate>Sun, 25 Aug 2019 00:00:00 +0000</lastBuildDate>
     <image>
       <url>https://pvnieo.github.io/img/icon.png</url>
       <title>pvnieo</title>
       <link>https://pvnieo.github.io/</link>
     </image>
+    
+    <item>
+      <title>The genesis of beating Atari games</title>
+      <link>https://pvnieo.github.io/post/beating-atari/</link>
+      <pubDate>Sun, 25 Aug 2019 00:00:00 +0000</pubDate>
+      <guid>https://pvnieo.github.io/post/beating-atari/</guid>
+      <description>&lt;h1 id=&#34;introduction&#34;&gt;Introduction&lt;/h1&gt;
+
+&lt;p&gt;Advances in the field of reinforcement learning are increasing, the aim
+being to teach AI to achieve human performance in everyday tasks. One of
+the important area of research in reinforcement learning is to train
+agents directly from high-dimensional sensory inputs like vision. In
+this sense, video games can be considered a good way to test and improve
+reinforcement learning algorithms, mainly because they offer several
+different scenarios that require different types of policies to be
+solved.&lt;/p&gt;
+
+&lt;p&gt;In this blog, we will focus on beating Atari 2600 games, by training
+reinforcement learning algorithms to find the optimal control policy
+from solely raw video frames. For that, we will present approaches that
+harness the high quality of extracted features from high dimensional
+state spaces as an image, made by the recent advances of Convolutional
+Neural Networks (CNNs) &lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:1&#34;&gt;&lt;a class=&#34;footnote&#34; href=&#34;#fn:1&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:2&#34;&gt;&lt;a class=&#34;footnote&#34; href=&#34;#fn:2&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;. Such features were hand-crafted
+under previous successful approaches, which had limited the scope of
+application.&lt;/p&gt;
+
+&lt;p&gt;In particular, we will present the &lt;strong&gt;Deep Q-Network (DQN)&lt;/strong&gt; algorithm,
+published by the DeepMind team in 2013 &lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:3&#34;&gt;&lt;a class=&#34;footnote&#34; href=&#34;#fn:3&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;, marking a milestone in
+machine learning, as well as the improvements made by the same team to
+their algorithm in 2015 in &lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:4&#34;&gt;&lt;a class=&#34;footnote&#34; href=&#34;#fn:4&#34;&gt;4&lt;/a&gt;&lt;/sup&gt; and &lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:5&#34;&gt;&lt;a class=&#34;footnote&#34; href=&#34;#fn:5&#34;&gt;5&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
+
+&lt;h1 id=&#34;background&#34;&gt;Background&lt;/h1&gt;
+
+&lt;p&gt;Reinforcement learning is about discovering an &lt;strong&gt;optimal policy&lt;/strong&gt; (how
+to map situations to actions), in order to maximize a numerical reward
+signal. The agent is not told which action yields the maximum reward,
+but must discover it by interacting with the environment and exploring
+all possible scenarios.&lt;/p&gt;
+
+&lt;p&gt;One way of finding the optimal policy is through &lt;strong&gt;Q-learning&lt;/strong&gt;. The
+latter is based on an action-value function $Q$ (Q for quality), which
+assign for each state &lt;strong&gt;s&lt;/strong&gt;, and a possible action &lt;strong&gt;a&lt;/strong&gt;, following a
+policy $\pi$, an estimate of the total reward we would achieve starting
+at &lt;strong&gt;s&lt;/strong&gt;, taking the action &lt;strong&gt;a&lt;/strong&gt; then following the same policy (This expression is valid for the Infinite time horizon with terminal state setting, which we are interested in in this study):&lt;/p&gt;
+
+&lt;p&gt;&lt;span  class=&#34;math&#34;&gt;\[Q^{\pi}(s,a) = \operatorname{\mathbb{E}}[\sum_{t&#39; = t}^{T} \gamma^{t&#39; - t} r_{t&#39;} |s_t = s, a_t = a, \pi]\]&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;We define the optimal action-value function &lt;span  class=&#34;math&#34;&gt;\(Q^{*}(s,a)\)&lt;/span&gt; as
+&lt;span  class=&#34;math&#34;&gt;\(Q^{*}(s,a) = max_{\pi} Q^{\pi}(s,a)\)&lt;/span&gt;, which correspond to the optimal
+policy. If &lt;span  class=&#34;math&#34;&gt;\(Q^{*}(s,a)\)&lt;/span&gt; is known for each state and action, then the
+optimal policy is nothing more than the &lt;em&gt;greedy policy&lt;/em&gt;:
+&lt;span  class=&#34;math&#34;&gt;\(\pi^{*}(s) = argmax_a Q^{*}(s,a)\)&lt;/span&gt;.&lt;/p&gt;
+
+&lt;p&gt;The basic idea behind Q-learning algorithm is that the optimal
+action-value function obeys the &lt;em&gt;Bellman equation&lt;/em&gt;:
+&lt;span  class=&#34;math&#34;&gt;\(Q^{*}(s,a) = \operatorname{\mathbb{E}}_{s&#39; \sim \mathcal{E}} [r + \gamma max_{a&#39;} Q^{*}(s&#39;,a&#39;) | s, a]\)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;This will allow us to estimate the value of the action-value function by
+using this identity as an iterative update. This algorithm was
+introduced by Ch. Watkins &lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:6&#34;&gt;&lt;a class=&#34;footnote&#34; href=&#34;#fn:6&#34;&gt;6&lt;/a&gt;&lt;/sup&gt; and it was proven to converge to
+the optimal action-value function if there are finite number of states
+and each of the state-action pair is presented repeatedly
+&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:7&#34;&gt;&lt;a class=&#34;footnote&#34; href=&#34;#fn:7&#34;&gt;7&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
+
+&lt;p&gt;However, in our case, the problem is too large to learn all action
+values in all states separately, and the classical Q-learning algorithm
+is not adapted. Instead, a function approximator will be used to
+approximate the action-value function
+$Q(s, a; \theta) \approx Q^{*}(s,a)$. In this project, we will discuss
+the approximation using a neural network, commonly called Deep
+Q-Learning.&lt;/p&gt;
+
+&lt;p&gt;The neural network is trained to minimize an objective function that
+mimic the behavior of the standard Q-learning update rule:
+&lt;span  class=&#34;math&#34;&gt;\(\mathcal{L}(\theta) = \operatorname{\mathbb{E}}\big[\big( r + \gamma max_{a&#39;} Q(s&#39;, a&#39;, \theta) - Q(s, a, \theta) \big)^2\big]\)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;This objective function is optimized end-to-end by stochastic gradient
+descent, using the following gradient:
+&lt;span  class=&#34;math&#34;&gt;\(\frac{\partial \mathcal{L}}{\partial \theta} = \operatorname{\mathbb{E}}\big[\big( r + \gamma max_{a&#39;} Q(s&#39;, a&#39;, \theta) - Q(s, a, \theta) \big) \frac{\partial Q(s, a, \theta)}{\partial \theta}\big]
+\label{grad}\)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;Using non linear function approximator with the reinforcement learning
+setting is know to be unstable or even diverge &lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:8&#34;&gt;&lt;a class=&#34;footnote&#34; href=&#34;#fn:8&#34;&gt;8&lt;/a&gt;&lt;/sup&gt;&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:4&#34;&gt;&lt;a class=&#34;footnote&#34; href=&#34;#fn:4&#34;&gt;9&lt;/a&gt;&lt;/sup&gt;,
+and this mainly due to:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;Training data is corelated&lt;/strong&gt;:   Because the learning agent obtains the learning data by interacting
+with the environment, this data is not &lt;strong&gt;i.i.d&lt;/strong&gt;. because successive
+samples are correlated&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;Moving target values&lt;/strong&gt;:   this due to the fact that small changes to the action-value function
+Q may have big impact on the policy, so the policy may oscillate,
+and this cause the data to swing from one extreme to another&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;Scale of rewards and Q-values is unknown&lt;/strong&gt;:   resulting in large changes in loss from update to update, causing
+exploding gradient which poorly affect back propagation&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;In the following, we will show the techniques used to overcome the
+causes of the instability of training Deep Q-learning models.&lt;/p&gt;
+
+&lt;p&gt;It should be noted that Deep Q-learning algorithm is &lt;strong&gt;model-free&lt;/strong&gt;,
+meaning that it solves the reinforcement learning task by searching over
+policy space to find policies that result in better reward without
+learning a model of the environment. It’s also &lt;strong&gt;off-policy&lt;/strong&gt;, meaning
+that the learned action-value function, $Q$, directly approximates $Q^*$
+, the optimal action-value function, independent of the policy being
+followed&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:9&#34;&gt;&lt;a class=&#34;footnote&#34; href=&#34;#fn:9&#34;&gt;10&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
+
+&lt;h1 id=&#34;atari-2600&#34;&gt;Atari 2600&lt;/h1&gt;
+
+&lt;p&gt;The Atari 2600 is a home video game console that was sold in various
+versions by Atari Inc. from 1977 to 1992. It introduced or popularized
+many arcade video games that are now considered classics, such as Pong,
+Breakout, and Space Invaders. Bellemare et.al &lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:10&#34;&gt;&lt;a class=&#34;footnote&#34; href=&#34;#fn:10&#34;&gt;11&lt;/a&gt;&lt;/sup&gt; have
+introduced in 2013 the Arcade Learning Environment, which is an emulator
+for testing and evaluating reinforcement learning algorithms on Atari
+2600 games. Since, it’s used as a rigorous testbed for evaluating and
+comparing approaches on a very large set of problems.&lt;/p&gt;
+
+&lt;p&gt;A human playing an Atari game sees $210 \times 160 \times 3$ RGB image,
+and the game state is updated every time the agent makes an action. The
+user can perform 18 actions with the joystick: doing nothing, pressing
+the action button, going in one of 8 directions (up, down, left and
+right as well as the 4 diagonals) and going in any of these directions
+while pressing the button. Depending on the game, only a subset of these
+actions is used. For example, only 4 actions are used to control the
+Breakout game: doing nothing, moving left or right, and the action
+button for summoning the ball.&lt;/p&gt;
+
+&lt;h2 id=&#34;preprocessing&#34;&gt;Preprocessing&lt;/h2&gt;
+
+&lt;p&gt;A preprocessing step is applied to the frames returned by the
+environment. In fact, in order to reduce computation complexity, all
+frames are preprocessed by converting them to gray-scale, down-sampling
+them to have a shape of $110 \times 84$, and cropping the images to have
+a size of $84 \times 84 \times 1$ &lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:see-figure&#34;&gt;&lt;a class=&#34;footnote&#34; href=&#34;#fn:see-figure&#34;&gt;0&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;figure&gt;&lt;img src=&#34;./preprocess.jpeg&#34; alt=&#34;png&#34;&gt;&lt;/figure&gt;&lt;/p&gt;
+
+&lt;p&gt;Another important preprocessing step is stacking frames. Since one frame
+cannot have all the necessary information - such as direction of motion,
+speed or acceleration - for the agent to make decisions, a set of the
+last four frames will be stacked.&lt;/p&gt;
+
+&lt;p&gt;So at the end of the preprocessing step, each state that will be
+observed by the agent has the format of $84 \times 84 \times 4$.This
+preprocessing will be denoted by $\phi$.&lt;/p&gt;
+
+&lt;h1 id=&#34;deep-qnetwork&#34;&gt;Deep Q-Network&lt;/h1&gt;
+
+&lt;p&gt;Deep Q-Network is an algorithm introduced first by Mnih et.al &lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:3&#34;&gt;&lt;a class=&#34;footnote&#34; href=&#34;#fn:3&#34;&gt;12&lt;/a&gt;&lt;/sup&gt;
+in NIPS 2013, and an improved version of it &lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:4&#34;&gt;&lt;a class=&#34;footnote&#34; href=&#34;#fn:4&#34;&gt;13&lt;/a&gt;&lt;/sup&gt; was published on
+Nature 2015. DQN combines Q-learning with a flexible deep neural
+network, and was tested on a varied and large set of Atari 2600 games,
+reaching super human-level performance on many games.&lt;/p&gt;
+
+&lt;h2 id=&#34;basic-dqn&#34;&gt;Basic DQN&lt;/h2&gt;
+
+&lt;p&gt;The basic DQN is a multi-layered neural network that for a given state
+$s$ outputs a vector of action values $Q(s, · ; \theta)$, where $\theta$
+are the parameters of the network.&lt;/p&gt;
+
+&lt;p&gt;The success of DQN is essentially due to the use of CNNs to extract
+relevant features from raw frames, and the use of the experience
+replay&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:11&#34;&gt;&lt;a class=&#34;footnote&#34; href=&#34;#fn:11&#34;&gt;14&lt;/a&gt;&lt;/sup&gt; method to stabilize the learning.&lt;/p&gt;
+
+&lt;p&gt;The problem of Online-learning (which is learning from streaming data)is
+that the samples arrive in order they are experienced and, as such, are
+highly correlated. The other problem is that the samples are immediately
+thrown away after using them, as a result, we are not learning from our
+experience effectively. The experience replay is performed by storing
+the agent experiences at each time-step,
+&lt;span  class=&#34;math&#34;&gt;\(e_t = (s_t, a_t, r_t, a_{t+1})\)&lt;/span&gt;, into a data set
+$\mathcal{D} = e_1, e_2, ..., e_N$ called &lt;em&gt;replay memory&lt;/em&gt;, and during
+each learning step, a &lt;em&gt;random batch&lt;/em&gt; is sampled from $\mathcal{D}$, and
+a gradient descent is performed on it. The experience replay method
+breaks the correlation in data, bringing the problem back to i.i.d
+setting, and also enable the agent to learn from past policies.&lt;/p&gt;
+
+&lt;p&gt;Following the greedy policy only may not be sufficient to discover the
+optimal policy since there no exploration. To overcome this, an
+$\epsilon$-greedy policy is used, where the greedy action is selected
+with a probability of (1 - $\epsilon$), and a random action is selected
+with probability $\epsilon$. During training, this $\epsilon$ is
+annealed linearly between 1 and 0.1, decreasing with each time-step.&lt;/p&gt;
+
+&lt;p&gt;The full algorithm is presented in &lt;strong&gt;Algorithm 1&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;p&gt;&lt;strong&gt;Algorithm 1&lt;/strong&gt; Deep Q-learning with Experience Replay&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;p&gt;Initialize replay memory D to capacity N&lt;br&gt;
+nitialize action-value function Q with random weights&lt;br&gt;
+&lt;strong&gt;for&lt;/strong&gt; episode = 1, M &lt;strong&gt;do&lt;/strong&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Initialise sequence &lt;span  class=&#34;math&#34;&gt;\(s_1 = \left\{ x_1\right\}\)&lt;/span&gt; and preprocessed
+sequenced $\phi_1 = \phi(s1)$&lt;br&gt;
+&lt;strong&gt;for&lt;/strong&gt; t = 1, T &lt;strong&gt;do&lt;/strong&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;With probability $\epsilon$ select a random action $a_t$&lt;br&gt;
+otherwise select $a_t = max_a Q^*(\phi(s_t), a; \theta)$&lt;br&gt;
+Execute action &lt;span  class=&#34;math&#34;&gt;\(a_t\)&lt;/span&gt; in emulator and observe reward &lt;span  class=&#34;math&#34;&gt;\(r_t\)&lt;/span&gt; and image
+&lt;span  class=&#34;math&#34;&gt;\(x_{t+1}\)&lt;/span&gt;&lt;br&gt;
+set &lt;span  class=&#34;math&#34;&gt;\(s_{t+1} = s_t\)&lt;/span&gt; and preprocess &lt;span  class=&#34;math&#34;&gt;\(\phi_{t+1} = \phi(s_{t+1})\)&lt;/span&gt;&lt;br&gt;
+Store transition&lt;span  class=&#34;math&#34;&gt;\((\phi_t, a_t, r_t, \phi_{t+1})\)&lt;/span&gt; in &lt;span  class=&#34;math&#34;&gt;\(\mathcal{D}\)&lt;/span&gt;&lt;br&gt;
+Sample random minibatch of transitions &lt;span  class=&#34;math&#34;&gt;\((\phi_j, a_j, r_j, \phi_{j+1})\)&lt;/span&gt;
+from &lt;span  class=&#34;math&#34;&gt;\(\mathcal{D}\)&lt;/span&gt;&lt;br&gt;
+Set &lt;span  class=&#34;math&#34;&gt;\(y_j = \left\{
+\begin{array}{ll}
+r_j &amp; \text{for terminal } \phi_{j+1} \\
+r_j + \gamma max_{a&#39;} Q(\phi_{j+1}, a&#39;; \theta) &amp; \text{for non-terminal } \phi_{j+1}
+\end{array}
+\right.\)&lt;/span&gt;&lt;br&gt;
+Perform a gradient descent step on
+$\big( y_j - Q(\phi_j, a_j; \theta)    \big)^2$ according to equation
+[grad]&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;strong&gt;end for&lt;/strong&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;strong&gt;end for&lt;/strong&gt;&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;Another technique used to stabilize the training is &lt;em&gt;clipping reward&lt;/em&gt;,
+in which all positive rewards are set +1 and all negative rewards are
+set -1. This technique aims to limits the scale of the error derivatives
+and prevent from the exploding gradient.&lt;/p&gt;
+
+&lt;p&gt;Finally, the architecture of the network is provided in the following table.
+The network is a convolutional neural network, composed of two
+convolutional layers, followed by a flatten layer, and the final layers
+are two fully-connected layers. The network takes as an input a
+preprocessed state that has the size of $84 \times 84 \times 4$, as
+explained before. The output of the network of size $n = 18$,
+corresponding to the number of possible actions.&lt;/p&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th align=&#34;center&#34;&gt;Layer&lt;/th&gt;
+&lt;th align=&#34;center&#34;&gt;Input&lt;/th&gt;
+&lt;th align=&#34;center&#34;&gt;Filter size&lt;/th&gt;
+&lt;th align=&#34;center&#34;&gt;Stride&lt;/th&gt;
+&lt;th align=&#34;center&#34;&gt;Num filters&lt;/th&gt;
+&lt;th align=&#34;center&#34;&gt;Activation&lt;/th&gt;
+&lt;th align=&#34;left&#34;&gt;Output&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;conv1&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;&lt;span  class=&#34;math&#34;&gt;\(84 \times 84 \times 4\)&lt;/span&gt;&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;$8 \times 8$&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;4&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;16&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;ReLU&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;&lt;span  class=&#34;math&#34;&gt;\(20 \times 20 \times 16\)&lt;/span&gt;&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;conv2&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;$20 \times 20 \times 16$&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;$4 \times 4$&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;2&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;32&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;ReLU&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;&lt;span  class=&#34;math&#34;&gt;\(9 \times 9 \times 32\)&lt;/span&gt;&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;fc3&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;$9 \times 9 \times 32$&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;256&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;ReLU&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;256&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;fc4&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;256&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;18&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;Linear&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;18&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h2 id=&#34;improved-dqn&#34;&gt;Improved DQN&lt;/h2&gt;
+
+&lt;p&gt;In 2015, DeepMind published a new version &lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:4&#34;&gt;&lt;a class=&#34;footnote&#34; href=&#34;#fn:4&#34;&gt;15&lt;/a&gt;&lt;/sup&gt; of their algorithm
+DQN, that seems not only to perform the first version, but also achieved
+a level comparable to that of a professional human games tester across a
+set of 49 games, using the same algorithm, network architecture and
+hyperparameters.&lt;/p&gt;
+
+&lt;p&gt;The main differences between the new and the old architecture is the use
+of a bigger CNN to catch more complex features, and the use of a target
+network.&lt;/p&gt;
+
+&lt;p&gt;The target network is used to prevent the &lt;strong&gt;moving target values&lt;/strong&gt;
+problem(see section [background]). The target network $Q-$ is a neural
+network parameterized by $\theta^-$ has the same architecture as the
+action-value network $Q$, but instead of the latter, whose parameters
+$\theta$ are updated at each iteration, the parameters of the target
+network are updated periodically, using a copy of the parameters of the
+Q-network. Practically, the parameters $\theta^-$ of the $Q-$ network
+are updated every 10000 iterations.&lt;/p&gt;
+
+&lt;p&gt;The target network is used to generate the targets $y_i$ in the
+Q-learning updates. This modification makes the algorithm more stable
+compared to standard online Q-learning, where an update that increases
+&lt;span  class=&#34;math&#34;&gt;\(Q(s_t,a_t)\)&lt;/span&gt; often also increases $Q(s_{t+1},a&#39;)$ and hence also
+increases the target $y_j$, possibly leading to oscillations or
+divergence of the policy.&lt;/p&gt;
+
+&lt;p&gt;The full improved DQN algorithm is presented in &lt;strong&gt;Algorithm 2&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;p&gt;&lt;strong&gt;Algorithm 2&lt;/strong&gt; Improved Deep Q-learning with Experience Replay&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;p&gt;Initialize replay memory D to capacity N&lt;br&gt;
+Initialize action-value function $Q$ with random weights $\theta$&lt;br&gt;
+Initialize e target action-value function $Q^-$ with weights
+$\theta^- = \theta$&lt;br&gt;
+&lt;strong&gt;for&lt;/strong&gt; episode = 1, M &lt;strong&gt;do&lt;/strong&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Initialise sequence &lt;span  class=&#34;math&#34;&gt;\(s_1 = \left\{ x_1\right\}\)&lt;/span&gt; and preprocessed
+sequenced $\phi_1 = \phi(s1)$&lt;br&gt;
+&lt;strong&gt;for&lt;/strong&gt; t = 1, T &lt;strong&gt;do&lt;/strong&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;With probability $\epsilon$ select a random action $a_t$&lt;br&gt;
+otherwise select $a_t = max_a Q^*(\phi(s_t), a; \theta)$&lt;br&gt;
+Execute action $a_t$ in emulator and observe reward &lt;span  class=&#34;math&#34;&gt;\(r_t\)&lt;/span&gt; and image
+&lt;span  class=&#34;math&#34;&gt;\(x_{t+1}\)&lt;/span&gt;&lt;br&gt;
+set &lt;span  class=&#34;math&#34;&gt;\(s_{t+1} = s_t\)&lt;/span&gt; and preprocess &lt;span  class=&#34;math&#34;&gt;\(\phi_{t+1} = \phi(s_{t+1})\)&lt;/span&gt;&lt;br&gt;
+Store transition&lt;span  class=&#34;math&#34;&gt;\((\phi_t, a_t, r_t, \phi_{t+1})\)&lt;/span&gt; in &lt;span  class=&#34;math&#34;&gt;\(\mathcal{D}\)&lt;/span&gt;&lt;br&gt;
+Sample random minibatch of transitions &lt;span  class=&#34;math&#34;&gt;\((\phi_j, a_j, r_j, \phi_{j+1})\)&lt;/span&gt;
+from &lt;span  class=&#34;math&#34;&gt;\(\mathcal{D}\)&lt;/span&gt;&lt;br&gt;
+Set &lt;span  class=&#34;math&#34;&gt;\( y_j = \left\{
+\begin{array}{ll}
+r_j &amp; \text{for terminal } \phi_{j+1} \\
+r_j + \gamma max_{a&#39;} Q^-(\phi_{j+1}, a&#39;; \theta^-) &amp; \text{for non-terminal } \phi_{j+1}
+\end{array}
+\right.\)&lt;/span&gt;&lt;br&gt;
+Perform a gradient descent step on
+$\big( y_j - Q(\phi_j, a_j; \theta)    \big)^2$ with respect to the
+network parameters $\theta$&lt;br&gt;
+Every C steps, reset $Q^- = Q$&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;strong&gt;end for&lt;/strong&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;strong&gt;end for&lt;/strong&gt;&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;p&gt;Another improvement made to the basic DQN algorithm is the use of
+&lt;em&gt;Hubber loss&lt;/em&gt;. Instead of the squared error loss
+while computing the error term from
+&lt;span  class=&#34;math&#34;&gt;\( r_j + \gamma max_{a&#39;} Q^-(\phi_{j+1}, a&#39;; \theta^-) - Q^-(\phi_{j+1}, a&#39;; \theta^-) \)&lt;/span&gt;,
+which had the property of being less sensitive to outliers in data than
+the squared error loss. This form of error clipping further improved the
+stability of the algorithm &lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:4&#34;&gt;&lt;a class=&#34;footnote&#34; href=&#34;#fn:4&#34;&gt;16&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;span  class=&#34;math&#34;&gt;\[\label{hubber}
+\mathcal{L}(a) = \left\{
+\begin{array}{ll}
+\frac{1}{2} a^2  &amp; \text{for } |a| \leq 1\\
+|a| - \frac{1}{2} &amp; \text{otherwise}
+\end{array}
+\right.\]&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;Finally, the improved DQN used a bigger CNN. In particular, the number
+of filters is doubled, and a convolutional layer is added before the
+first fully connected layer. Details of the architecture are provided in the
+table bellow.&lt;/p&gt;
+
+&lt;p&gt;When evaluated, the improved DQN outperforms the best existing
+reinforcement learning methods on 43 of the games without incorporating
+any of the additional prior knowledge about Atari 2600 games used by
+other approaches. Furthermore, it has performed at a level that was
+comparable to that of a professional human games tester across the set
+of 49 games, achieving more than 75% of the human score on more than
+half of the games (29 games).&lt;/p&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th align=&#34;center&#34;&gt;Layer&lt;/th&gt;
+&lt;th align=&#34;center&#34;&gt;Input&lt;/th&gt;
+&lt;th align=&#34;center&#34;&gt;Filter size&lt;/th&gt;
+&lt;th align=&#34;center&#34;&gt;Stride&lt;/th&gt;
+&lt;th align=&#34;center&#34;&gt;Num filters&lt;/th&gt;
+&lt;th align=&#34;center&#34;&gt;Activation&lt;/th&gt;
+&lt;th align=&#34;left&#34;&gt;Output&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;conv1&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;&lt;span  class=&#34;math&#34;&gt;\(84 \times 84 \times 4\)&lt;/span&gt;&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;$8 \times 8$&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;4&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;32&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;ReLU&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;&lt;span  class=&#34;math&#34;&gt;\(20 \times 20 \times 32\)&lt;/span&gt;&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;conv2&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;$20 \times 20 \times 32$&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;$4 \times 4$&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;2&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;64&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;ReLU&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;&lt;span  class=&#34;math&#34;&gt;\(9 \times 9 \times 64\)&lt;/span&gt;&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;conv3&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;$9 \times 9 \times 64$&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;$3 \times 3$&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;1&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;64&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;ReLU&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;&lt;span  class=&#34;math&#34;&gt;\(7 \times 7 \times 64\)&lt;/span&gt;&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;fc4&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;$7 \times 7 \times 64$&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;256&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;ReLU&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;512&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;fc5&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;512&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;18&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;Linear&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;18&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h2 id=&#34;double-dqn&#34;&gt;Double DQN&lt;/h2&gt;
+
+&lt;p&gt;Double DQN (DDQN) is another improvement to the previous DQN algorithm.
+In fact, another team from DeepMind showed in their publication
+&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:5&#34;&gt;&lt;a class=&#34;footnote&#34; href=&#34;#fn:5&#34;&gt;17&lt;/a&gt;&lt;/sup&gt; that the previous deep Q-Learning algorithm has tendency to
+overestimate the Q function value, due to the max in the formula used to
+set targets: &lt;span  class=&#34;math&#34;&gt;\(Q(s,a) \rightarrow r + \gamma max_a Q(s&#39;, a)\)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;This overestimation wouldn’t cause any problems if all the actions were
+equally overestimated, but the case is, that once one specific action
+becomes overestimated, it’s more likely to be chosen in the next
+iteration making it very hard for the agent to explore the environment
+uniformly and find the right policy.&lt;/p&gt;
+
+&lt;p&gt;A solution to this problem (of overestimation) was proposed by van
+Hasselt in &lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:12&#34;&gt;&lt;a class=&#34;footnote&#34; href=&#34;#fn:12&#34;&gt;18&lt;/a&gt;&lt;/sup&gt;, and is called Double learning.
+In this new
+algorithm, two Q functions ( $Q_1$ and $Q_2$ ) are independently
+learned. One function is then used to determine the maximizing action
+and second to estimate its value. Either $Q_1$ or $Q_2$ is updated
+randomly using the same formula as before:
+&lt;span  class=&#34;math&#34;&gt;\(Q_i(s,a) \rightarrow r + \gamma Q_j(s&#39;, argmax_a Q_i(s&#39;, a))\)&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;Van Hasselt has proven that by decoupling the maximizing action from its
+value in this way, one can indeed eliminate the maximization bias
+&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:12&#34;&gt;&lt;a class=&#34;footnote&#34; href=&#34;#fn:12&#34;&gt;19&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
+
+&lt;p&gt;The DDQN is based on this idea, and it uses the target network $Q^-$ as
+the second value function, without having to introduce additional
+networks. Therefore, the greedy policy is evaluated according to the
+online network, but using the target network to estimate its value. The
+update is the same as Improved DQN, but with minor change in the target
+$y_i$:&lt;/p&gt;
+
+&lt;p&gt;&lt;span  class=&#34;math&#34;&gt;\[y_i = r_i + \gamma Q(s_{i+1}, argmax_a Q(s_{i+1}, a; \theta); \theta^-)\]&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;The update to the target network stays unchanged from improved DQN, and
+remains a periodic copy of the online network.&lt;/p&gt;
+
+&lt;p&gt;In the DDQN paper &lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:5&#34;&gt;&lt;a class=&#34;footnote&#34; href=&#34;#fn:5&#34;&gt;20&lt;/a&gt;&lt;/sup&gt;, the authors reports that although DDQN
+does not always improve performance, it substantially benefits the
+stability of learning. This improved stability directly translates to
+ability to learn much complicated tasks.&lt;/p&gt;
+
+&lt;p&gt;When testing DDQN on 49 Atari games, it achieved about twice the average
+score of improved DQN with the same hyperparameters. With tuned
+hyperparameters, DDQN achieved almost four time the average score of
+improved DQN.&lt;/p&gt;
+
+&lt;h1 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h1&gt;
+
+&lt;p&gt;In this study, we have presented the use of deep learning combined with
+q-learning to control agents directly from high dimensional sensory
+inputs. In particular, we presented the Deep Q-Network algorithm and
+it’s variant that marks a milestone in machine learning, by mastering to
+play Atari 2600 games based only on raw video frames.&lt;/p&gt;
+
+&lt;h3 id=&#34;references&#34;&gt;References&lt;/h3&gt;
+&lt;div class=&#34;footnotes&#34;&gt;
+
+&lt;hr&gt;
+
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34;&gt;I. Sutskever A. Krizhevsky and G. Hinton. Imagenet classification with deep convolutional neural networks. In Advances in Neural Information Processing Systems 25, pages 1106–1114, 2012.
+ &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:1&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li id=&#34;fn:2&#34;&gt;S. Chintala Y. LeCun. P. Sermanet, K. Kavukcuoglu. Pedestrian detection with unsupervised multi-stage feature learning. In Proc. International Conference onComputer Vision and Pattern Recognition (CVPR 2013), 2013.
+ &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:2&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li id=&#34;fn:3&#34;&gt;D. Silver A. Graves I. Antonoglou D. Wierstra M. Riedmiller V. Mnih, K. Kavukcuoglu. Playing atari with deep reinforcement learning. 2013. 2012
+ &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:3&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li id=&#34;fn:4&#34;&gt;D. Silver A. A. Rusu J. Veness M. G.Bellemare A. Graves M. Riedmiller A. K. Fidjeland G. Ostrovski S. Petersen C. Beattie A. Sadik I. Antonoglou H. King D. Kumaran D. Wierstra S. Legg V. Mnih, K. Kavukcuoglu and D. Hassabis. Human-level control through deep reinforcement learning. 2015
+ &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:4&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li id=&#34;fn:5&#34;&gt;D. Silver H. van Hasselt, A. Guez. Deep reinforcement learning with double q-learning. In arXiv:1509.06461v3 [cs.LG], 2015.
+ &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:5&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li id=&#34;fn:6&#34;&gt;Ch. Watkins. Learning from delayed rewards. 1989
+ &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:6&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li id=&#34;fn:7&#34;&gt;P. Dayan CH Watkins. Q-learning. In Machine Learning, pages 279–292, 1992
+ &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:7&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li id=&#34;fn:8&#34;&gt;B. Van Roy John N. Tsitsiklis. An analysis of temporal-difference learning with function approximation. In IEEETrans. Automat. Contr. 42, pages 674–690, 1997
+ &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:8&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li id=&#34;fn:4&#34;&gt;D. Silver A. A. Rusu J. Veness M. G.Bellemare A. Graves M. Riedmiller A. K. Fidjeland G. Ostrovski S. Petersen C. Beattie A. Sadik I. Antonoglou H. King D. Kumaran D. Wierstra S. Legg V. Mnih, K. Kavukcuoglu and D. Hassabis. Human-level control through deep reinforcement learning. 2015
+ &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:4&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li id=&#34;fn:9&#34;&gt;Richard Sutton and Andrew Barto. Reinforcement Learning: An Introduction. MIT Press, 1998
+ &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:9&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li id=&#34;fn:10&#34;&gt;Joel Veness Marc G Bellemare, Yavar Naddaf and Michael Bowling. The arcade learning environment: An evaluation platform for general agents. In Journal of Artificial Intelligence Research, 47, pages 253–279, 2013
+ &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:10&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li id=&#34;fn:3&#34;&gt;D. Silver A. Graves I. Antonoglou D. Wierstra M. Riedmiller V. Mnih, K. Kavukcuoglu. Playing atari with deep reinforcement learning. 2013. 2012
+ &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:3&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li id=&#34;fn:4&#34;&gt;D. Silver A. A. Rusu J. Veness M. G.Bellemare A. Graves M. Riedmiller A. K. Fidjeland G. Ostrovski S. Petersen C. Beattie A. Sadik I. Antonoglou H. King D. Kumaran D. Wierstra S. Legg V. Mnih, K. Kavukcuoglu and D. Hassabis. Human-level control through deep reinforcement learning. 2015
+ &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:4&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li id=&#34;fn:11&#34;&gt;Long-Ji Lin. Reinforcement learning for robots using neural networks. Technical report, DTIC Document, 1993
+ &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:11&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li id=&#34;fn:4&#34;&gt;D. Silver A. A. Rusu J. Veness M. G.Bellemare A. Graves M. Riedmiller A. K. Fidjeland G. Ostrovski S. Petersen C. Beattie A. Sadik I. Antonoglou H. King D. Kumaran D. Wierstra S. Legg V. Mnih, K. Kavukcuoglu and D. Hassabis. Human-level control through deep reinforcement learning. 2015
+ &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:4&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li id=&#34;fn:4&#34;&gt;D. Silver A. A. Rusu J. Veness M. G.Bellemare A. Graves M. Riedmiller A. K. Fidjeland G. Ostrovski S. Petersen C. Beattie A. Sadik I. Antonoglou H. King D. Kumaran D. Wierstra S. Legg V. Mnih, K. Kavukcuoglu and D. Hassabis. Human-level control through deep reinforcement learning. 2015
+ &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:4&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li id=&#34;fn:5&#34;&gt;D. Silver H. van Hasselt, A. Guez. Deep reinforcement learning with double q-learning. In arXiv:1509.06461v3 [cs.LG], 2015.
+ &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:5&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li id=&#34;fn:12&#34;&gt;H. van Hasselt. Double q-learning. In Advances in Neural Information Processing Systems, 23, pages 2613–2621, 2010
+ &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:12&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li id=&#34;fn:12&#34;&gt;H. van Hasselt. Double q-learning. In Advances in Neural Information Processing Systems, 23, pages 2613–2621, 2010
+ &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:12&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li id=&#34;fn:5&#34;&gt;D. Silver H. van Hasselt, A. Guez. Deep reinforcement learning with double q-learning. In arXiv:1509.06461v3 [cs.LG], 2015.
+ &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:5&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+</description>
+    </item>
     
     <item>
       <title>How to use the Learning Rate Finder in Pytorch</title>
