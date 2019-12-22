@@ -83,7 +83,7 @@ In his paper &quot;Cyclical Learning Rates for Training Neural Networks&quot;, L
   
   
   
-  <link rel="stylesheet" href="/css/academic.min.d035b2830ed3550c5f80c484f872e14d.css">
+  <link rel="stylesheet" href="/css/academic.min.72134522a6d8af1d590edd0a7d65c8ad.css">
 
   
 
@@ -502,7 +502,6 @@ In his paper &quot;Cyclical Learning Rates for Training Neural Networks&quot;, L
 <h2 id="demo-time">Demo time</h2>
 
 <p>First of all, let's start by importing the necessary packages.</p>
-
 <pre><code># stdlib
 import time
 import warnings
@@ -525,13 +524,10 @@ from lr_finder import LRFinder
 warnings.filterwarnings('ignore')
 %reload_ext autoreload
 %autoreload 2
-%matplotlib inline
-</code></pre>
-
+%matplotlib inline</code></pre>
 <p>For this demonstration, we will use the MNIST dataset, and we will implement a very simple neural network using pytorch.</p>
 
 <p>First of all, we define the data loaders and the transformations we will use later.</p>
-
 <pre><code>batch_size_train = 64
 batch_size_test = 1000
 ## creating dataloaders
@@ -552,28 +548,22 @@ val_loader = torch.utils.data.DataLoader(
                                  (0.1307,), (0.3081,))
                              ])),
   batch_size=batch_size_test, shuffle=True)
-dataloaders = {&quot;train&quot;: train_loader, &quot;val&quot;: val_loader}
-</code></pre>
-
-<pre><code>examples = enumerate(val_loader)
+dataloaders = {"train": train_loader, "val": val_loader}</code></pre><pre><code>examples = enumerate(val_loader)
 batch_idx, (example_data, example_targets) = next(examples)
 fig = plt.figure()
 for i in range(6):
   plt.subplot(2,3,i+1)
   plt.tight_layout()
   plt.imshow(example_data[i][0], cmap='gray', interpolation='none')
-  plt.title(&quot;Ground Truth: {}&quot;.format(example_targets[i]))
+  plt.title("Ground Truth: {}".format(example_targets[i]))
   plt.xticks([])
   plt.yticks([])
-fig
-</code></pre>
-
+fig</code></pre>
 <p><figure><img src="./demo_5_0.png" alt="png"></figure></p>
 
 <p><figure><img src="./demo_5_1.png" alt="png"></figure></p>
 
 <p>Now let's build the network. We will use a simple network, with three convolution layers, and two fully connected layers.</p>
-
 <pre><code>## build the network
 class Net(nn.Module):
     def __init__(self):
@@ -591,19 +581,13 @@ class Net(nn.Module):
         x = F.relu(self.fc1(x))
         x = F.dropout(x, training=self.training)
         x = self.fc2(x)
-        return F.log_softmax(x)
-</code></pre>
-
+        return F.log_softmax(x)</code></pre>
 <p>We will use the CrossEntropyLoss as a loss because we are facing a classification task, and we will use the famous SGD optimizer to optimize the network.</p>
-
 <pre><code>model = Net()
 optimizer = optim.SGD(model.parameters(), lr=0.001)
-device = torch.device(&quot;cuda:0&quot; if torch.cuda.is_available() else &quot;cpu&quot;)
-criterion = nn.CrossEntropyLoss().to(device)
-</code></pre>
-
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+criterion = nn.CrossEntropyLoss().to(device)</code></pre>
 <p>Let's define a helper method that will train the model</p>
-
 <pre><code>def train_model(model, criterion, optimizer, num_epochs=25):
     since = time.time()
 
@@ -651,7 +635,7 @@ criterion = nn.CrossEntropyLoss().to(device)
 
 
             # deep copy the model
-            if phase == 'val' and epoch_acc &gt; best_acc:
+            if phase == 'val' and epoch_acc > best_acc:
                 best_acc = epoch_acc
                 best_model_wts = copy.deepcopy(model.state_dict())
 
@@ -660,32 +644,23 @@ criterion = nn.CrossEntropyLoss().to(device)
 
     # load best model weights
     model.load_state_dict(best_model_wts)
-    return best_acc.item()
-</code></pre>
-
+    return best_acc.item()</code></pre>
 <p>In order to evaluate this method, we will train the same network several times, using the same hyperparameters, but only change the learning rate. First we will launch the learning rate finder method to find the optimal learning rate.</p>
-
 <pre><code>model = Net()
 optimizer = optim.SGD(model.parameters(), lr=0.1)
 lr_finder = LRFinder(model, optimizer, criterion)
 lr_finder.find(train_loader)
 plt.figure(figsize=(6,6))
-lr_finder.plot()
-</code></pre>
-
-<pre><code> 89%|████████▉ | 89/100 [00:00&lt;00:00, 91.63it/s]
+lr_finder.plot()</code></pre><pre><code> 89%|████████▉ | 89/100 [00:00<00:00, 91.63it/s]
 
 
 LR Finder is complete. See the graph using `.plot()` method.
 Min numerical gradient: 0.39810717055349676
-Min loss: 0.7585775750291828
-</code></pre>
-
+Min loss: 0.7585775750291828</code></pre>
 <p><figure><img src="./demo_13_2.png" alt="png"></figure></p>
 
 <p>After observing the graph, and following the instructions mentioned above, we will choose the value 0.1 for the learning rate.
 As a result, we will compare this value with other learning rate values which are 1e-4, 1e-3, 1e-2, 1 and 10. For each value, we will train the model 5 times, and we will record the average value of the accuracy obtained. The results will be summarized in a table below.</p>
-
 <pre><code>lrs = [1e-4, 1e-3, 1e-2, 0.1, 1, 10]
 repeat = 5
 accs = defaultdict(list)
@@ -694,29 +669,18 @@ for lr in tqdm(lrs):
         model = Net().to(device)
         optimizer = optim.SGD(model.parameters(), lr=lr)
         acc = train_model(model, criterion, optimizer, num_epochs=3)
-        accs[lr].append(acc)
-</code></pre>
-
-<pre><code>  0%|          | 0/6 [00:00&lt;?, ?it/s]
- 17%|█▋        | 1/6 [02:43&lt;13:38, 163.62s/it]
- 33%|███▎      | 2/6 [05:26&lt;10:53, 163.29s/it]
- 50%|█████     | 3/6 [08:08&lt;08:08, 162.99s/it]
- 67%|██████▋   | 4/6 [10:50&lt;05:25, 162.65s/it]
- 83%|████████▎ | 5/6 [13:34&lt;02:43, 163.02s/it]
-100%|██████████| 6/6 [16:18&lt;00:00, 163.38s/it]
-</code></pre>
-
-<pre><code>means = [&quot;means&quot;] + [np.mean(accs[lr]) for lr in lrs]
-stds = [&quot;stds&quot;] + [np.std(accs[lr]) for lr in lrs]
-print(tabulate([means, stds], headers=[&quot;lrs&quot;] + lrs))
-</code></pre>
-
-<pre><code>lrs       0.0001      0.001        0.01         0.1           1          10
+        accs[lr].append(acc)</code></pre><pre><code>  0%|          | 0/6 [00:00<?, ?it/s]
+ 17%|█▋        | 1/6 [02:43<13:38, 163.62s/it]
+ 33%|███▎      | 2/6 [05:26<10:53, 163.29s/it]
+ 50%|█████     | 3/6 [08:08<08:08, 162.99s/it]
+ 67%|██████▋   | 4/6 [10:50<05:25, 162.65s/it]
+ 83%|████████▎ | 5/6 [13:34<02:43, 163.02s/it]
+100%|██████████| 6/6 [16:18<00:00, 163.38s/it]</code></pre><pre><code>means = ["means"] + [np.mean(accs[lr]) for lr in lrs]
+stds = ["stds"] + [np.std(accs[lr]) for lr in lrs]
+print(tabulate([means, stds], headers=["lrs"] + lrs))</code></pre><pre><code>lrs       0.0001      0.001        0.01         0.1           1          10
 -----  ---------  ---------  ----------  ----------  ----------  ----------
 means  0.17946    0.74826    0.95522     0.98172     0.1073      0.10414
-stds   0.0407632  0.0746226  0.00278381  0.00141619  0.00759342  0.00507685
-</code></pre>
-
+stds   0.0407632  0.0746226  0.00278381  0.00141619  0.00759342  0.00507685</code></pre>
 <p>Et Voila! as we can see, the learning rate suggested by lr_finder gives the best result.</p>
 
     </div>
@@ -786,6 +750,23 @@ stds   0.0407632  0.0746226  0.00278381  0.00141619  0.00759342  0.00507685
           <li>
             <a itemprop="sameAs" href="https://www.linkedin.com/in/souhaib-attaiki-595121102/" target="_blank" rel="noopener">
               <i class="fab fa-linkedin"></i>
+            </a>
+          </li>
+        
+          
+          
+          
+            
+          
+          
+          
+          
+          
+            
+          
+          <li>
+            <a itemprop="sameAs" href="https://www.researchgate.net/profile/Souhaib_Attaiki" target="_blank" rel="noopener">
+              <i class="fab fa-researchgate"></i>
             </a>
           </li>
         
@@ -957,7 +938,7 @@ stds   0.0407632  0.0746226  0.00278381  0.00141619  0.00759342  0.00507685
   
 
   <p class="powered-by">
-    &copy; 2019 Souhaib Attaiki, made with lots of ❤️ and steaming hot ☕️. 
+    © 2019 Souhaib Attaiki, made with lots of ❤️ and steaming hot ☕️. 
     
     <span class="float-right" aria-hidden="true">
       <a href="#" id="back_to_top">

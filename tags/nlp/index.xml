@@ -18,10 +18,8 @@
       <pubDate>Sat, 02 Dec 2017 00:00:00 +0000</pubDate>
       <guid>https://pvnieo.github.io/project/searchy/</guid>
       <description>&lt;p&gt;The objective of this project is to implement indexing techniques and search models in order to create a small ad-hoc search engine on two static databases of textual documents: CACM and CS276 (Stanford) collections.&lt;/p&gt;
-
 &lt;p&gt;In particular, a preprocessing step is performed to prepare the text, an uncompressed index and a compressed index of the two corpora have been built, and a Boolean search model and a vector search model have been implemented. The evaluation of both search engines shows a good performance.&lt;/p&gt;
-
-&lt;p&gt;For more information, see the &lt;a href=&#34;https://github.com/pvnieo/searchy/blob/master/report.ipynb&#34; target=&#34;_blank&#34;&gt;project report&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;For more information, see the &lt;a href=&#34;https://github.com/pvnieo/searchy/blob/master/report.ipynb&#34;&gt;project report&lt;/a&gt;.&lt;/p&gt;
 </description>
     </item>
     

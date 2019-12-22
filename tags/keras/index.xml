@@ -17,19 +17,14 @@
       <link>https://pvnieo.github.io/project/deeplevi/</link>
       <pubDate>Fri, 02 Mar 2018 00:00:00 +0000</pubDate>
       <guid>https://pvnieo.github.io/project/deeplevi/</guid>
-      <description>
-
-&lt;p&gt;Implementation of some automatic colorization models using deep neural network:&lt;/p&gt;
-
+      <description>&lt;p&gt;Implementation of some automatic colorization models using deep neural network:&lt;/p&gt;
 &lt;ol&gt;
-&lt;li&gt;Implementation of the regression-based model provided in: &amp;ldquo;Let there be Color!: Joint End-to-end Learning of Global and Local Image Priors for Automatic Image Colorization with Simultaneous Classification&amp;rdquo; &lt;a href=&#34;http://hi.cs.waseda.ac.jp/~iizuka/projects/colorization/en/&#34; target=&#34;_blank&#34;&gt;Link to the original paper&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;Implementation of a classification-based model  inspired in part by Zhang et al. in &amp;ldquo;Colorful Image Colorization&amp;rdquo;  [&lt;a href=&#34;https://github.com/richzhang/colorization&#34; target=&#34;_blank&#34;&gt;Link to the original paper&lt;/a&gt;] and R.Dah in &lt;a href=&#34;http://tinyclouds.org/colorize&#34; target=&#34;_blank&#34;&gt;here&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;Implementation of a regression-based model inspired from &lt;a href=&#34;https://medium.freecodecamp.org/colorize-b-w-photos-with-a-100-line-neural-network-53d9b4449f8d&#34; target=&#34;_blank&#34;&gt;this Medium blog article&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Implementation of the regression-based model provided in: &amp;ldquo;Let there be Color!: Joint End-to-end Learning of Global and Local Image Priors for Automatic Image Colorization with Simultaneous Classification&amp;rdquo; &lt;a href=&#34;http://hi.cs.waseda.ac.jp/~iizuka/projects/colorization/en/&#34;&gt;Link to the original paper&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Implementation of a classification-based model  inspired in part by Zhang et al. in &amp;ldquo;Colorful Image Colorization&amp;rdquo;  [&lt;a href=&#34;https://github.com/richzhang/colorization&#34;&gt;Link to the original paper&lt;/a&gt;] and R.Dah in &lt;a href=&#34;http://tinyclouds.org/colorize&#34;&gt;here&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Implementation of a regression-based model inspired from &lt;a href=&#34;https://medium.freecodecamp.org/colorize-b-w-photos-with-a-100-line-neural-network-53d9b4449f8d&#34;&gt;this Medium blog article&lt;/a&gt;&lt;/li&gt;
 &lt;/ol&gt;
-
 &lt;h2 id=&#34;project-report&#34;&gt;Project report&lt;/h2&gt;
-
-&lt;p&gt;You can consult the project report &lt;a href=&#34;https://github.com/pvnieo/Deep-Levi/blob/master/%C3%89tude%20comparative%20d%E2%80%99architecture%20de%20colorisation%20automatique.pdf&#34; target=&#34;_blank&#34;&gt;here&lt;/a&gt; (in French)&lt;/p&gt;
+&lt;p&gt;You can consult the project report &lt;a href=&#34;https://github.com/pvnieo/Deep-Levi/blob/master/%C3%89tude%20comparative%20d%E2%80%99architecture%20de%20colorisation%20automatique.pdf&#34;&gt;here&lt;/a&gt; (in French)&lt;/p&gt;
 </description>
     </item>
     

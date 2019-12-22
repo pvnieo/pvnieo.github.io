@@ -18,14 +18,10 @@
       <pubDate>Sat, 02 Mar 2019 00:00:00 +0000</pubDate>
       <guid>https://pvnieo.github.io/project/mangan/</guid>
       <description>&lt;p&gt;This project aims to color black and white mangap ages, based on the corresponding anime adaptation, using Generative Adversarial Nets.&lt;/p&gt;
-
-&lt;p&gt;For the moment, two types of GANs have been tested: &lt;a href=&#34;https://arxiv.org/pdf/1611.07004.pdf&#34; target=&#34;_blank&#34;&gt;pix2pix&lt;/a&gt; and &lt;a href=&#34;https://arxiv.org/pdf/1703.10593.pdf&#34; target=&#34;_blank&#34;&gt;cycle-gan&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;For more information about our method, see the &lt;a href=&#34;https://www.researchgate.net/publication/331175026_Manga_Colorization_using_Generative_Adversarial_Nets&#34; target=&#34;_blank&#34;&gt;Project Report&lt;/a&gt;.&lt;/p&gt;
-
+&lt;p&gt;For the moment, two types of GANs have been tested: &lt;a href=&#34;https://arxiv.org/pdf/1611.07004.pdf&#34;&gt;pix2pix&lt;/a&gt; and &lt;a href=&#34;https://arxiv.org/pdf/1703.10593.pdf&#34;&gt;cycle-gan&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;For more information about our method, see the &lt;a href=&#34;https://www.researchgate.net/publication/331175026_Manga_Colorization_using_Generative_Adversarial_Nets&#34;&gt;Project Report&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;Some of the results obtained are displayed in the following image:
-&lt;img src=&#34;results.jpeg&#34; alt=&#34;GitHub Logo&#34; /&gt;&lt;/p&gt;
-
+&lt;img src=&#34;results.jpeg&#34; alt=&#34;GitHub Logo&#34;&gt;&lt;/p&gt;
 &lt;p&gt;This project is &lt;strong&gt;under development&lt;/strong&gt;, currently, there are diffuclties to color images containing text.&lt;/p&gt;
 </description>
     </item>

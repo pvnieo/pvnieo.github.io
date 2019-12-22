@@ -17,14 +17,10 @@
       <link>https://pvnieo.github.io/project/project-euler/</link>
       <pubDate>Wed, 01 Mar 2017 00:00:00 +0000</pubDate>
       <guid>https://pvnieo.github.io/project/project-euler/</guid>
-      <description>
-
-&lt;h2 id=&#34;what-is-project-euler&#34;&gt;What is Project Euler?&lt;/h2&gt;
-
+      <description>&lt;h2 id=&#34;what-is-project-euler&#34;&gt;What is Project Euler?&lt;/h2&gt;
 &lt;p&gt;Project Euler is a set of challenging computational/algorithmic problems. Every so often,
 new problems are added and old problems are changed to reduce cheating from other sources.
-You can find the problems here: &lt;a href=&#34;https://projecteuler.net/problems&#34; target=&#34;_blank&#34;&gt;https://projecteuler.net/problems&lt;/a&gt;.&lt;/p&gt;
-
+You can find the problems here: &lt;a href=&#34;https://projecteuler.net/problems&#34;&gt;https://projecteuler.net/problems&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;Every solved problem has a program written in Python and C++.&lt;/p&gt;
 </description>
     </item>
