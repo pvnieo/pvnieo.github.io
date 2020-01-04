@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="generator" content="Source Themes Academic 4.4.0">
+
+  
+
+  
+  
+  
+  
+  
+    
+    
+    
+  
+  
+
+  <meta name="author" content="Souhaib Attaiki">
+
+  
+  
+  
+    
+  
+  <meta name="description" content="Introduction As my 7 year old nephew discovered the famous strategy game &quot;Tic Tac Toe&quot;, I wanted to help her by creating an AI that she can play against, which has several levels of difficulty so that she can learn the game step by step.
+Tic Tac Toe, for those who don&#39;t know, is a paper and pencil game for two players, X and O, who take turns marking the spaces in a 3×3 grid.">
+
+  
+  <link rel="alternate" hreflang="en-us" href="https://pvnieo.github.io/post/learn-tic-tac-toe/">
+
+  
+
+
+  
+
+  
+  
+  
+  <meta name="theme-color" content="rgb(0, 136, 204)">
+  
+
+  
+  
+  
+  
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.6/css/academicons.min.css" integrity="sha256-uFVgMKfistnJAfoCUQigIl+JfUaP47GrRKjf6CTPVmw=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.0/css/all.css" integrity="sha384-aOkxzJ5uQz7WBObEZcHvV5JvRW3TUc2rNPA7pe3AwnsUohiw1Vj2Rgx2KSOkF5+h" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" integrity="sha256-ygkqlh3CYSUri3LhQxzdcm0n1EQvH2Y+U5S2idbLtxs=" crossorigin="anonymous">
+
+    
+    
+    
+      
+    
+    
+      
+      
+        
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css" crossorigin="anonymous" title="hl-light" disabled>
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/dracula.min.css" crossorigin="anonymous" title="hl-dark">
+        
+      
+    
+
+    
+
+    
+
+  
+
+  
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Cutive+Mono|Lora:400,700|Roboto:400,700&display=swap">
+  
+
+  
+  
+  
+  <link rel="stylesheet" href="/css/academic.min.72134522a6d8af1d590edd0a7d65c8ad.css">
+
+  
+
+  
+  
+  
+
+  
+
+  <link rel="manifest" href="/index.webmanifest">
+  <link rel="icon" type="image/png" href="/img/icon-32.png">
+  <link rel="apple-touch-icon" type="image/png" href="/img/icon-192.png">
+
+  <link rel="canonical" href="https://pvnieo.github.io/post/learn-tic-tac-toe/">
+
+  
+  
+  
+  
+    
+  
+  
+  <meta property="twitter:card" content="summary_large_image">
+  
+  <meta property="og:site_name" content="pvnieo">
+  <meta property="og:url" content="https://pvnieo.github.io/post/learn-tic-tac-toe/">
+  <meta property="og:title" content="Learn Tic Tac Toe | pvnieo">
+  <meta property="og:description" content="Introduction As my 7 year old nephew discovered the famous strategy game &quot;Tic Tac Toe&quot;, I wanted to help her by creating an AI that she can play against, which has several levels of difficulty so that she can learn the game step by step.
+Tic Tac Toe, for those who don&#39;t know, is a paper and pencil game for two players, X and O, who take turns marking the spaces in a 3×3 grid."><meta property="og:image" content="https://pvnieo.github.io/post/learn-tic-tac-toe/featured.jpg">
+  <meta property="twitter:image" content="https://pvnieo.github.io/post/learn-tic-tac-toe/featured.jpg"><meta property="og:locale" content="en-us">
+  
+    
+      <meta property="article:published_time" content="2020-01-01T00:00:00&#43;00:00">
+    
+    <meta property="article:modified_time" content="2020-01-01T00:00:00&#43;00:00">
+  
+
+  
+
+
+  
+
+
+
+
+
+  <title>Learn Tic Tac Toe | pvnieo</title>
+
+</head>
+
+<body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" class="dark">
+
+  <aside class="search-results" id="search">
+  <div class="container">
+    <section class="search-header">
+
+      <div class="row no-gutters justify-content-between mb-3">
+        <div class="col-6">
+          <h1>Search</h1>
+        </div>
+        <div class="col-6 col-search-close">
+          <a class="js-search" href="#"><i class="fas fa-times-circle text-muted" aria-hidden="true"></i></a>
+        </div>
+      </div>
+
+      <div id="search-box">
+        
+        <input name="q" id="search-query" placeholder="Search..." autocapitalize="off"
+        autocomplete="off" autocorrect="off" spellcheck="false" type="search">
+        
+      </div>
+
+    </section>
+    <section class="section-search-results">
+
+      <div id="search-hits">
+        
+      </div>
+
+    </section>
+  </div>
+</aside>
+
+
+  
+<nav class="navbar navbar-light fixed-top navbar-expand-lg py-0 compensate-for-scrollbar" id="navbar-main">
+  <div class="container">
+
+    
+      <a class="navbar-brand" href="/"><img src="/img/icon.png" alt="pvnieo"></a>
+      
+      <button type="button" class="navbar-toggler" data-toggle="collapse"
+              data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+        <span><i class="fas fa-bars"></i></span>
+      </button>
+      
+
+    
+    <div class="collapse navbar-collapse" id="navbar">
+
+      
+      
+      <ul class="navbar-nav mr-auto">
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+          
+          
+          
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/#about"><span>Home</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+          
+          
+          
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/#projects"><span>Projects</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+          
+          
+          
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/#posts"><span>Posts</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+          
+          
+          
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/#contact"><span>Contact</span></a>
+        </li>
+
+        
+        
+
+      
+      </ul>
+      <ul class="navbar-nav ml-auto">
+      
+
+        
+
+        
+        <li class="nav-item">
+          <a class="nav-link js-search" href="#"><i class="fas fa-search" aria-hidden="true"></i></a>
+        </li>
+        
+
+        
+
+        
+        <li class="nav-item">
+          <a class="nav-link js-dark-toggle" href="#"><i class="fas fa-moon" aria-hidden="true"></i></a>
+        </li>
+        
+
+      </ul>
+
+    </div>
+  </div>
+</nav>
+
+
+  <article class="article" itemscope itemtype="http://schema.org/Article">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+
+<div class="article-container pt-3">
+  <h1 itemprop="name">Learn Tic Tac Toe</h1>
+
+  
+
+  
+
+
+
+<meta content="2020-01-01 00:00:00 &#43;0000 UTC" itemprop="datePublished">
+<meta content="2020-01-01 00:00:00 &#43;0000 UTC" itemprop="dateModified">
+
+<div class="article-metadata">
+
+  
+  
+
+  
+  <span class="article-date">
+    
+    
+      
+    
+    <time>Jan 1, 2020</time>
+  </span>
+  
+
+  
+
+  
+  <span class="middot-divider"></span>
+  <span class="article-reading-time">
+    6 min read
+  </span>
+  
+
+  
+  
+  
+
+  
+  
+
+  
+    
+<div class="share-box" aria-hidden="true">
+  <ul class="share">
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://twitter.com/intent/tweet?url=https://pvnieo.github.io/post/learn-tic-tac-toe/&amp;text=Learn%20Tic%20Tac%20Toe" target="_blank" rel="noopener" class="share-btn-twitter">
+          <i class="fab fa-twitter"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.facebook.com/sharer.php?u=https://pvnieo.github.io/post/learn-tic-tac-toe/&amp;t=Learn%20Tic%20Tac%20Toe" target="_blank" rel="noopener" class="share-btn-facebook">
+          <i class="fab fa-facebook-f"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.linkedin.com/shareArticle?url=https://pvnieo.github.io/post/learn-tic-tac-toe/&amp;title=Learn%20Tic%20Tac%20Toe" target="_blank" rel="noopener" class="share-btn-linkedin">
+          <i class="fab fa-linkedin-in"></i>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+  
+
+</div>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="btn-links mb-3">
+  
+  
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<br>
+
+
+  
+  
+  
+    
+  
+  
+  
+  
+  
+    
+  
+  <a class="btn btn-outline-primary my-1 mr-1" href="https://github.com/pvnieo/Learn-Noughts-and-Crosses" target="_blank" rel="noopener">
+    <i class="fab fa-github mr-1"></i>
+    View source
+  </a>
+
+
+</div>
+
+
+</div>
+
+
+<div class="article-header article-container featured-image-wrapper mt-4 mb-4" style="max-width: 720px; max-height: 540px;">
+  <div style="position: relative">
+    <img src="/post/learn-tic-tac-toe/featured_hu9045cbd5d210a4b9d7bf20ffdeef9432_397056_720x0_resize_q90_lanczos.jpg" alt="" class="featured-image">
+    
+  </div>
+</div>
+
+
+
+  <div class="article-container">
+
+    <div class="article-style" itemprop="articleBody">
+      <h1 id="introduction">Introduction</h1>
+
+<p>As my 7 year old nephew discovered the famous strategy game &quot;Tic Tac Toe&quot;, I wanted to help her by creating an AI that she can play against, which has several levels of difficulty so that she can learn the game step by step.</p>
+
+<p>Tic Tac Toe, for those who don't know, is a paper and pencil game for two players, X and O, who take turns marking the spaces in a 3×3 grid. The player who succeeds in placing three of their marks in a horizontal, vertical, or diagonal row is the winner (see image bellow).
+<figure><img src="./tic.png" alt="png"></figure></p>
+
+<h1 id="game-interface">Game interface</h1>
+
+<p>As my goal is to help her master the game, I didn't dwell on the game interface. I implemented the latter in python, using the <code>pygame</code> library.</p>
+
+<p>The interface is a 3×3 grid, where the player can put an &quot;X&quot; or &quot;O&quot; in a box by clicking on it, or it will be put automatically if it is the turn of an AI. At the end of the game, a line indicating the winning combination (if it exists) will be drawn in red (see picture below). Before the game starts, the player can choose the type and level of the AI he wants to play against, as well as the number of matches he wants to play. You can find my implementation <a href="https://github.com/pvnieo/Learn-Noughts-and-Crosses">here</a>.
+<figure><img src="./image.png" alt="png"></figure></p>
+
+<h1 id="tictactoe-with-the-minimax-algorithm">Tic-Tac-Toe with the Minimax Algorithm</h1>
+
+<p>As Tic-Tac-Toe is a <strong>zero-sum</strong> (each participant’s gain is equal to the other participants’ losses), <strong>perfect information</strong> game (everything is known about the current game state), and has a small number of different states (5,478 legal states<sup class="footnote-ref" id="fnref:1"><a class="footnote" href="#fn:1">1</a></sup>), the minmax algorithm would be a perfect and fast algorithm for this case.</p>
+
+<h4 id="minmax-algorithm">Minmax algorithm</h4>
+
+<p>The basic idea behind minimax is that we want to know what is the best move to play when we assume our opponent will play the best moves possible. In Minimax the two players are called maximizer and minimizer. The maximizer tries to get the highest score possible while the minimizer tries to do the opposite and get the lowest score possible.</p>
+
+<p>Every board state has a value associated with it. In a given state if the maximizer has upper hand then, the score of the board will tend to be some positive value. If the minimizer has the upper hand in that board state then it will tend to be some negative value. In the case of Tic Tac Toe, there are only three board scores: either the maximizer wins (+1), or the maximizer loses (-1), or there is a tie, or the game is not yet over (0). The minmax algorithm explores the game from any starting position until it reaches all possible endgame states,, creating a tree, and then backtrack the best move to make, assuming that the opponent will always play his best move.</p>
+
+<p>In the example bellow<sup class="footnote-ref" id="fnref:2"><a class="footnote" href="#fn:2">2</a></sup>, the algorithm will choose to play upper right, because it's the best move (otherwise, the algorithm loses).
+<figure><img src="./minmax.png" alt="png"></figure></p>
+
+<h4 id="minmax-with-levels">Minmax with levels</h4>
+
+<p>Since our goal is to create an &quot;AI&quot; with several levels of difficulty, implementing a full version of minmax will create an unbeatable algorithm (since the number of states is small, and we can evaluate any tree down to the leaves), and the best we can hope to do against it is a tie. For this effect, in order to create several levels, we will evaluate the tree not up to the leaves, but only up to a predefined depth, this will allow us to create 3 levels of difficulty:</p>
+
+<ul>
+<li><strong>Easy</strong>: using a depth of <strong>1</strong>. This will create an AI that plays randomly, but will not waste the chance if it can win the game in it next turn.</li>
+<li><strong>Medium</strong>: using a depth of <strong>2</strong>. This will also create an AI that plays randomly, and in addition to not spoiling the chance if it can win the game on the next turn, it will also block the opponent's movement if it detects that he is winning the game on the next turn. The only way to win against it is by playing a <strong>fork</strong> (create an opportunity where the player has two ways to win (two non-blocked lines of 2)).</li>
+<li><strong>Hard</strong>: using a depth of <strong>9</strong>. This AI is unbeatable, and one can only hope for a draw.</li>
+</ul>
+
+<p>In addition to this, we will add a random agent (all moves are random) as an initiation to the game.</p>
+
+<h1 id="tictactoe-with-reinforcement-learning">Tic-Tac-Toe with Reinforcement Learning</h1>
+
+<p>While I was at it, I tried to train a reinforcement learning agent to play Tic Tac Toe only by interacting with the environment. For our case (small number of state-action pairs), the tabular Q learning algorithm is an automatic choice. The basic idea of tabular Q-learning is simple: create a table consisting of all possible states on one axis and all possible actions on another axis.The value of each cell in this table is the Q-value. A high Q-value is good and a low Q-value is bad. If the value of the Q function is known, then the optimal policy is simply the greedy policy (more information can be found be <a href="../beating-atari">here</a>).</p>
+
+<p>Q learning algorithm is an iterative algorithm, where we initialize the Q function randomly, and we update it after each training episode using the formula:
+<figure><img src="./formula.png" alt="png"></figure></p>
+
+<p>I trained my algorithm for 6000 episode using a learning rate <code>alpha = 0.3</code>, and using a epsilon-greedy policy, starting with an <code>epsilon = 0.7</code>, and decaying it through the learning. Regarding the reward, I used a <code>reward = -1</code> for a lost match, <code>+1</code> for a won match, and <code>0.5</code> for a tie. For state generation, I trained my algorithm against a random agent, because I found that the results are better than playing against a minmax agent. All the training code is available on the github repo mentioned above.</p>
+
+<h1 id="evaluation">Evaluation</h1>
+
+<p>To conclude, I wanted to see which of the three agents is the best, the random agent (clearly not), the minmax agent level &quot;hard&quot;, or the QL agent. To do this, I made them play against each other for 1000 matches, where each time one of them starts playing first. The results are summarized in the table below.
+<figure><img src="./score.png" alt="png"></figure></p>
+
+<p>We can see that both algorithms (minmax and Q learning) are unbeatable, but we can notice the superiority of QL over minmax when playing against the random agent. Indeed, the QL agent has won more matches against the latter than minmax. This can be explained by the fact that minmax chooses its move by assuming that the opponent will always choose its best move, which is not the case for the random agent, whereas the QL agent chooses its best move by evaluating the state of the game and making no assumptions about the opponent's move.</p>
+
+<h3 id="references">References</h3>
+<div class="footnotes">
+
+<hr>
+
+<ol>
+<li id="fn:1"><a href="https://en.wikipedia.org/wiki/Game_complexity">https://en.wikipedia.org/wiki/Game_complexity</a>
+ <a class="footnote-return" href="#fnref:1"><sup>^</sup></a></li>
+<li id="fn:2"><a href="https://nestedsoftware.com/2019/06/15/tic-tac-toe-with-the-minimax-algorithm-5988.123625.html">https://nestedsoftware.com/2019/06/15/tic-tac-toe-with-the-minimax-algorithm-5988.123625.html</a>
+ <a class="footnote-return" href="#fnref:2"><sup>^</sup></a></li>
+</ol>
+</div>
+
+    </div>
+
+    
+
+
+    
+
+<div class="article-tags">
+  
+  <a class="badge badge-light" href="/tags/minmax/">Minmax</a>
+  
+  <a class="badge badge-light" href="/tags/reinforcement-learning/">Reinforcement Learning</a>
+  
+  <a class="badge badge-light" href="/tags/ql/">QL</a>
+  
+  <a class="badge badge-light" href="/tags/tic-tac-toe/">Tic Tac Toe</a>
+  
+  <a class="badge badge-light" href="/tags/python/">Python</a>
+  
+</div>
+
+
+
+    
+      
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+  
+  
+    
+  
+  
+  <div class="media author-card" itemscope itemtype="http://schema.org/Person">
+    
+      
+      <img class="portrait mr-3" src="/authors/admin/avatar_hu89c008f47ff8946cace8a4fb81c3947b_29222_250x250_fill_lanczos_center_2.png" itemprop="image" alt="Avatar">
+    
+
+    <div class="media-body">
+      <h5 class="card-title" itemprop="name"><a href="https://pvnieo.github.io/">Souhaib Attaiki</a></h5>
+      <h6 class="card-subtitle">Applied Mathematics / Computer Science student</h6>
+      <p class="card-text" itemprop="description">Passionate about computer vision and machine learning.</p>
+      <ul class="network-icon" aria-hidden="true">
+        
+          
+          
+          
+            
+          
+          
+          
+          
+          
+            
+          
+          <li>
+            <a itemprop="sameAs" href="https://www.linkedin.com/in/souhaib-attaiki-595121102/" target="_blank" rel="noopener">
+              <i class="fab fa-linkedin"></i>
+            </a>
+          </li>
+        
+          
+          
+          
+            
+          
+          
+          
+          
+          
+            
+          
+          <li>
+            <a itemprop="sameAs" href="https://www.researchgate.net/profile/Souhaib_Attaiki" target="_blank" rel="noopener">
+              <i class="fab fa-researchgate"></i>
+            </a>
+          </li>
+        
+          
+          
+          
+            
+          
+          
+          
+          
+          
+            
+          
+          <li>
+            <a itemprop="sameAs" href="https://github.com/pvnieo" target="_blank" rel="noopener">
+              <i class="fab fa-github"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+
+
+      
+      
+      <div class="article-widget">
+        <div class="hr-light"></div>
+        <h3>Related</h3>
+        <ul>
+          
+          <li><a href="/post/beating-atari/">The genesis of beating Atari games</a></li>
+          
+          <li><a href="/project/mangan/">ManGan</a></li>
+          
+          <li><a href="/project/deeplevi/">Deep Levi</a></li>
+          
+          <li><a href="/project/searchy/">Searchy</a></li>
+          
+          <li><a href="/project/algozoo/">My Algorithm Zoo</a></li>
+          
+        </ul>
+      </div>
+      
+    
+
+    
+
+    
+
+
+  </div>
+</article>
+
+      
+
+    
+    
+    
+    <script src="/js/mathjax-config.js"></script>
+    
+
+    
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.4/imagesloaded.pkgd.min.js" integrity="sha256-lqvxZrPLtfffUl2G/e7szqSvPBILGbwmsGE1MKlOi0Q=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.6/isotope.pkgd.min.js" integrity="sha256-CBrpuqrMhXwcLLUd5tvQ4euBHCdh7wGlDfNz8vbu/iI=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" integrity="sha256-X5PoE3KU5l+JcX+w09p/wHl9AzK333C4hJ2I9S5mD4M=" crossorigin="anonymous"></script>
+
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/8.0.0/mermaid.min.js" integrity="sha256-0w92bcB21IY5+rGI84MGj52jNfHNbXVeQLrZ0CGdjNY=" crossorigin="anonymous" title="mermaid"></script>
+      
+
+      
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js" integrity="sha256-aYTdUrn6Ow1DDgh5JTc3aDGnnju48y/1c8s1dgkYPQ8=" crossorigin="anonymous"></script>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/languages/python.min.js"></script>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/languages/c&#43;&#43;.min.js"></script>
+        
+      
+
+      
+      
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_CHTML-full" integrity="sha256-GhM+5JHb6QUzOQPXSJLEWP7R73CbkisjzK5Eyij4U9w=" crossorigin="anonymous" async></script>
+      
+    
+
+    
+    
+
+    
+    
+    <script>hljs.initHighlightingOnLoad();</script>
+    
+
+    
+    
+    <script>
+      const search_index_filename = "/index.json";
+      const i18n = {
+        'placeholder': "Search...",
+        'results': "results found",
+        'no_results': "No results found"
+      };
+      const content_type = {
+        'post': "Posts",
+        'project': "Projects",
+        'publication' : "Publications",
+        'talk' : "Talks"
+        };
+    </script>
+    
+
+    
+    
+
+    
+    
+    <script id="search-hit-fuse-template" type="text/x-template">
+      <div class="search-hit" id="summary-{{key}}">
+      <div class="search-hit-content">
+        <div class="search-hit-name">
+          <a href="{{relpermalink}}">{{title}}</a>
+          <div class="article-metadata search-hit-type">{{type}}</div>
+          <p class="search-hit-description">{{snippet}}</p>
+        </div>
+      </div>
+      </div>
+    </script>
+    
+
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.1/fuse.min.js" integrity="sha256-VzgmKYmhsGNNN4Ph1kMW+BjoYJM2jV5i4IlFoeZA9XI=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+    
+
+    
+    
+
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+      
+    
+    
+    
+    
+    <script src="/js/academic.min.16bbb3750feb7244c9bc409a5a4fe678.js"></script>
+
+    
+
+
+
+
+
+
+  
+  <div class="container">
+    <footer class="site-footer">
+  
+
+  <p class="powered-by">
+    © 2020 Souhaib Attaiki, made with lots of ❤️ and steaming hot ☕️. 
+    
+    <span class="float-right" aria-hidden="true">
+      <a href="#" id="back_to_top">
+        <span class="button_icon">
+          <i class="fas fa-chevron-up fa-2x"></i>
+        </span>
+      </a>
+    </span>
+    
+  </p>
+</footer>
+
+  </div>
+  
+
+  
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Cite</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <pre><code class="tex hljs"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-outline-primary my-1 js-copy-cite" href="#" target="_blank">
+          <i class="fas fa-copy"></i> Copy
+        </a>
+        <a class="btn btn-outline-primary my-1 js-download-cite" href="#" target="_blank">
+          <i class="fas fa-download"></i> Download
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tic Tac Toe | pvnieo</title>
+    <link>https://pvnieo.github.io/tags/tic-tac-toe/</link>
+      <atom:link href="https://pvnieo.github.io/tags/tic-tac-toe/index.xml" rel="self" type="application/rss+xml" />
+    <description>Tic Tac Toe</description>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><copyright>© 2020 Souhaib Attaiki, made with lots of ❤️ and steaming hot ☕️.</copyright><lastBuildDate>Wed, 01 Jan 2020 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>https://pvnieo.github.io/img/icon.png</url>
+      <title>Tic Tac Toe</title>
+      <link>https://pvnieo.github.io/tags/tic-tac-toe/</link>
+    </image>
+    
+    <item>
+      <title>Learn Tic Tac Toe</title>
+      <link>https://pvnieo.github.io/post/learn-tic-tac-toe/</link>
+      <pubDate>Wed, 01 Jan 2020 00:00:00 +0000</pubDate>
+      <guid>https://pvnieo.github.io/post/learn-tic-tac-toe/</guid>
+      <description>&lt;h1 id=&#34;introduction&#34;&gt;Introduction&lt;/h1&gt;
+
+&lt;p&gt;As my 7 year old nephew discovered the famous strategy game &amp;quot;Tic Tac Toe&amp;quot;, I wanted to help her by creating an AI that she can play against, which has several levels of difficulty so that she can learn the game step by step.&lt;/p&gt;
+
+&lt;p&gt;Tic Tac Toe, for those who don&#39;t know, is a paper and pencil game for two players, X and O, who take turns marking the spaces in a 3×3 grid. The player who succeeds in placing three of their marks in a horizontal, vertical, or diagonal row is the winner (see image bellow).
+&lt;figure&gt;&lt;img src=&#34;./tic.png&#34; alt=&#34;png&#34;&gt;&lt;/figure&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;game-interface&#34;&gt;Game interface&lt;/h1&gt;
+
+&lt;p&gt;As my goal is to help her master the game, I didn&#39;t dwell on the game interface. I implemented the latter in python, using the &lt;code&gt;pygame&lt;/code&gt; library.&lt;/p&gt;
+
+&lt;p&gt;The interface is a 3×3 grid, where the player can put an &amp;quot;X&amp;quot; or &amp;quot;O&amp;quot; in a box by clicking on it, or it will be put automatically if it is the turn of an AI. At the end of the game, a line indicating the winning combination (if it exists) will be drawn in red (see picture below). Before the game starts, the player can choose the type and level of the AI he wants to play against, as well as the number of matches he wants to play. You can find my implementation &lt;a href=&#34;https://github.com/pvnieo/Learn-Noughts-and-Crosses&#34;&gt;here&lt;/a&gt;.
+&lt;figure&gt;&lt;img src=&#34;./image.png&#34; alt=&#34;png&#34;&gt;&lt;/figure&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;tictactoe-with-the-minimax-algorithm&#34;&gt;Tic-Tac-Toe with the Minimax Algorithm&lt;/h1&gt;
+
+&lt;p&gt;As Tic-Tac-Toe is a &lt;strong&gt;zero-sum&lt;/strong&gt; (each participant’s gain is equal to the other participants’ losses), &lt;strong&gt;perfect information&lt;/strong&gt; game (everything is known about the current game state), and has a small number of different states (5,478 legal states&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:1&#34;&gt;&lt;a class=&#34;footnote&#34; href=&#34;#fn:1&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;), the minmax algorithm would be a perfect and fast algorithm for this case.&lt;/p&gt;
+
+&lt;h4 id=&#34;minmax-algorithm&#34;&gt;Minmax algorithm&lt;/h4&gt;
+
+&lt;p&gt;The basic idea behind minimax is that we want to know what is the best move to play when we assume our opponent will play the best moves possible. In Minimax the two players are called maximizer and minimizer. The maximizer tries to get the highest score possible while the minimizer tries to do the opposite and get the lowest score possible.&lt;/p&gt;
+
+&lt;p&gt;Every board state has a value associated with it. In a given state if the maximizer has upper hand then, the score of the board will tend to be some positive value. If the minimizer has the upper hand in that board state then it will tend to be some negative value. In the case of Tic Tac Toe, there are only three board scores: either the maximizer wins (+1), or the maximizer loses (-1), or there is a tie, or the game is not yet over (0). The minmax algorithm explores the game from any starting position until it reaches all possible endgame states,, creating a tree, and then backtrack the best move to make, assuming that the opponent will always play his best move.&lt;/p&gt;
+
+&lt;p&gt;In the example bellow&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:2&#34;&gt;&lt;a class=&#34;footnote&#34; href=&#34;#fn:2&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;, the algorithm will choose to play upper right, because it&#39;s the best move (otherwise, the algorithm loses).
+&lt;figure&gt;&lt;img src=&#34;./minmax.png&#34; alt=&#34;png&#34;&gt;&lt;/figure&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;minmax-with-levels&#34;&gt;Minmax with levels&lt;/h4&gt;
+
+&lt;p&gt;Since our goal is to create an &amp;quot;AI&amp;quot; with several levels of difficulty, implementing a full version of minmax will create an unbeatable algorithm (since the number of states is small, and we can evaluate any tree down to the leaves), and the best we can hope to do against it is a tie. For this effect, in order to create several levels, we will evaluate the tree not up to the leaves, but only up to a predefined depth, this will allow us to create 3 levels of difficulty:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Easy&lt;/strong&gt;: using a depth of &lt;strong&gt;1&lt;/strong&gt;. This will create an AI that plays randomly, but will not waste the chance if it can win the game in it next turn.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Medium&lt;/strong&gt;: using a depth of &lt;strong&gt;2&lt;/strong&gt;. This will also create an AI that plays randomly, and in addition to not spoiling the chance if it can win the game on the next turn, it will also block the opponent&#39;s movement if it detects that he is winning the game on the next turn. The only way to win against it is by playing a &lt;strong&gt;fork&lt;/strong&gt; (create an opportunity where the player has two ways to win (two non-blocked lines of 2)).&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Hard&lt;/strong&gt;: using a depth of &lt;strong&gt;9&lt;/strong&gt;. This AI is unbeatable, and one can only hope for a draw.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;In addition to this, we will add a random agent (all moves are random) as an initiation to the game.&lt;/p&gt;
+
+&lt;h1 id=&#34;tictactoe-with-reinforcement-learning&#34;&gt;Tic-Tac-Toe with Reinforcement Learning&lt;/h1&gt;
+
+&lt;p&gt;While I was at it, I tried to train a reinforcement learning agent to play Tic Tac Toe only by interacting with the environment. For our case (small number of state-action pairs), the tabular Q learning algorithm is an automatic choice. The basic idea of tabular Q-learning is simple: create a table consisting of all possible states on one axis and all possible actions on another axis.The value of each cell in this table is the Q-value. A high Q-value is good and a low Q-value is bad. If the value of the Q function is known, then the optimal policy is simply the greedy policy (more information can be found be &lt;a href=&#34;../beating-atari&#34;&gt;here&lt;/a&gt;).&lt;/p&gt;
+
+&lt;p&gt;Q learning algorithm is an iterative algorithm, where we initialize the Q function randomly, and we update it after each training episode using the formula:
+&lt;figure&gt;&lt;img src=&#34;./formula.png&#34; alt=&#34;png&#34;&gt;&lt;/figure&gt;&lt;/p&gt;
+
+&lt;p&gt;I trained my algorithm for 6000 episode using a learning rate &lt;code&gt;alpha = 0.3&lt;/code&gt;, and using a epsilon-greedy policy, starting with an &lt;code&gt;epsilon = 0.7&lt;/code&gt;, and decaying it through the learning. Regarding the reward, I used a &lt;code&gt;reward = -1&lt;/code&gt; for a lost match, &lt;code&gt;+1&lt;/code&gt; for a won match, and &lt;code&gt;0.5&lt;/code&gt; for a tie. For state generation, I trained my algorithm against a random agent, because I found that the results are better than playing against a minmax agent. All the training code is available on the github repo mentioned above.&lt;/p&gt;
+
+&lt;h1 id=&#34;evaluation&#34;&gt;Evaluation&lt;/h1&gt;
+
+&lt;p&gt;To conclude, I wanted to see which of the three agents is the best, the random agent (clearly not), the minmax agent level &amp;quot;hard&amp;quot;, or the QL agent. To do this, I made them play against each other for 1000 matches, where each time one of them starts playing first. The results are summarized in the table below.
+&lt;figure&gt;&lt;img src=&#34;./score.png&#34; alt=&#34;png&#34;&gt;&lt;/figure&gt;&lt;/p&gt;
+
+&lt;p&gt;We can see that both algorithms (minmax and Q learning) are unbeatable, but we can notice the superiority of QL over minmax when playing against the random agent. Indeed, the QL agent has won more matches against the latter than minmax. This can be explained by the fact that minmax chooses its move by assuming that the opponent will always choose its best move, which is not the case for the random agent, whereas the QL agent chooses its best move by evaluating the state of the game and making no assumptions about the opponent&#39;s move.&lt;/p&gt;
+
+&lt;h3 id=&#34;references&#34;&gt;References&lt;/h3&gt;
+&lt;div class=&#34;footnotes&#34;&gt;
+
+&lt;hr&gt;
+
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34;&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Game_complexity&#34;&gt;https://en.wikipedia.org/wiki/Game_complexity&lt;/a&gt;
+ &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:1&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li id=&#34;fn:2&#34;&gt;&lt;a href=&#34;https://nestedsoftware.com/2019/06/15/tic-tac-toe-with-the-minimax-algorithm-5988.123625.html&#34;&gt;https://nestedsoftware.com/2019/06/15/tic-tac-toe-with-the-minimax-algorithm-5988.123625.html&lt;/a&gt;
+ &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:2&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

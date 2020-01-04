@@ -5,12 +5,52 @@
     <link>https://pvnieo.github.io/tags/</link>
       <atom:link href="https://pvnieo.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     <description>Tags</description>
-    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><copyright>© 2019 Souhaib Attaiki, made with lots of ❤️ and steaming hot ☕️.</copyright><lastBuildDate>Sun, 25 Aug 2019 00:00:00 +0000</lastBuildDate>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><copyright>© 2020 Souhaib Attaiki, made with lots of ❤️ and steaming hot ☕️.</copyright><lastBuildDate>Wed, 01 Jan 2020 00:00:00 +0000</lastBuildDate>
     <image>
       <url>https://pvnieo.github.io/img/icon.png</url>
       <title>Tags</title>
       <link>https://pvnieo.github.io/tags/</link>
     </image>
+    
+    <item>
+      <title>Minmax</title>
+      <link>https://pvnieo.github.io/tags/minmax/</link>
+      <pubDate>Wed, 01 Jan 2020 00:00:00 +0000</pubDate>
+      <guid>https://pvnieo.github.io/tags/minmax/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Python</title>
+      <link>https://pvnieo.github.io/tags/python/</link>
+      <pubDate>Wed, 01 Jan 2020 00:00:00 +0000</pubDate>
+      <guid>https://pvnieo.github.io/tags/python/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>QL</title>
+      <link>https://pvnieo.github.io/tags/ql/</link>
+      <pubDate>Wed, 01 Jan 2020 00:00:00 +0000</pubDate>
+      <guid>https://pvnieo.github.io/tags/ql/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Reinforcement Learning</title>
+      <link>https://pvnieo.github.io/tags/reinforcement-learning/</link>
+      <pubDate>Wed, 01 Jan 2020 00:00:00 +0000</pubDate>
+      <guid>https://pvnieo.github.io/tags/reinforcement-learning/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Tic Tac Toe</title>
+      <link>https://pvnieo.github.io/tags/tic-tac-toe/</link>
+      <pubDate>Wed, 01 Jan 2020 00:00:00 +0000</pubDate>
+      <guid>https://pvnieo.github.io/tags/tic-tac-toe/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>Atari 2600</title>
@@ -25,22 +65,6 @@
       <link>https://pvnieo.github.io/tags/dqn/</link>
       <pubDate>Sun, 25 Aug 2019 00:00:00 +0000</pubDate>
       <guid>https://pvnieo.github.io/tags/dqn/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Python</title>
-      <link>https://pvnieo.github.io/tags/python/</link>
-      <pubDate>Sun, 25 Aug 2019 00:00:00 +0000</pubDate>
-      <guid>https://pvnieo.github.io/tags/python/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Reinforcement Learning</title>
-      <link>https://pvnieo.github.io/tags/reinforcement-learning/</link>
-      <pubDate>Sun, 25 Aug 2019 00:00:00 +0000</pubDate>
-      <guid>https://pvnieo.github.io/tags/reinforcement-learning/</guid>
       <description></description>
     </item>
     
